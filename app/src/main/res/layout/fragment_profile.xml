@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lukasz.whozzup.Profile">
+
+
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/profile_picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|top">
+    </com.facebook.login.widget.ProfilePictureView>
+
+</FrameLayout>
