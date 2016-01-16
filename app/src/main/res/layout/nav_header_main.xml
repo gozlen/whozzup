@@ -11,12 +11,12 @@
     android:orientation="vertical"
     android:gravity="bottom">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@android:drawable/sym_def_app_icon"
-        android:id="@+id/imageView" />
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/main_picture"
+        android:layout_width="73dp"
+        android:layout_height="73dp">
+    </com.facebook.login.widget.ProfilePictureView>
+
 
     <TextView
         android:layout_width="match_parent"

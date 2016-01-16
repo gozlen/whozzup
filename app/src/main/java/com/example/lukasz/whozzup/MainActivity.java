@@ -34,6 +34,7 @@ import com.facebook.HttpMethod;
 import android.widget.Toast;
 import android.location.LocationListener.*;
 import com.facebook.GraphRequest.Callback;
+import com.facebook.login.widget.ProfilePictureView;
 
 
 // Updated your class body:
@@ -79,6 +80,12 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(intent,1);
 
         }
+
+        String id = AccessToken.getCurrentAccessToken().getUserId();
+        ProfilePictureView profPict;
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        profPict = (ProfilePictureView) headerView.findViewById(R.id.main_picture);
+        profPict.setProfileId(id);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -220,12 +227,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
         if (id == R.id.nav_profile) {
             fragment = new Profile();
         } else if (id == R.id.nav_events) {
             fragment = new Events();
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_create) {
+            fragment = new Create();
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
