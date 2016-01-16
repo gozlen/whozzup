@@ -5,9 +5,11 @@
     tools:context="com.example.lukasz.whozzup.Events">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="This is gonna be an events page" />
+        android:layout_height="wrap_content"
+        android:id="@+id/listView" />
 
 </FrameLayout>
