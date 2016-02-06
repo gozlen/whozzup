@@ -1,5 +1,6 @@
 package com.example.lukasz.whozzup;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.BufferedInputStream;
@@ -32,7 +34,6 @@ import java.net.URL;
  */
 public class Create extends Fragment {
 
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,6 +50,31 @@ public class Create extends Fragment {
     public Create() {
         // Required empty public constructor
     }
+
+    public void onStart(){
+        super.onStart();
+        EditText editText6=(EditText)getView().findViewById(R.id.editText6);
+        editText6.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if(hasFocus){
+                    DateDialog dialog=new DateDialog(v);
+                    FragmentTransaction ft=getFragmentManager().beginTransaction();
+                    dialog.show(ft,"DatePicker");
+                }
+            }
+        });
+        editText6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateDialog dialog = new DateDialog(v);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                dialog.show(ft, "DatePicker");
+            }
+        });
+    }
+
+
 
     /**
      * Use this factory method to create a new instance of
