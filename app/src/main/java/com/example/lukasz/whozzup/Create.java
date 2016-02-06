@@ -2,6 +2,7 @@ package com.example.lukasz.whozzup;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class Create extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextView response;
 
     private OnFragmentInteractionListener mListener;
     private static final String TAG = Create.class.getSimpleName();
@@ -73,6 +75,7 @@ public class Create extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -84,27 +87,35 @@ public class Create extends Fragment {
 
 
         final Button button = (Button) v.findViewById(R.id.CreateEventButton);
-        final TextView response = (TextView) v.findViewById(R.id.ResponseText);
+        response = (TextView) v.findViewById(R.id.ResponseText);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                URL url;
-                InputStream in = null;
-                try {
-                    url = new URL("http://www.google.com");
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    in = urlConnection.getInputStream();
-                    String res = readIt(in, 500);
-                    response.setText(res);
-
-                } catch (Exception e) {
-                    Log.d(TAG, e.toString());
-                    response.setText(e.toString());
-                }
+                new FetchDataTask().execute("test");
             }
         });
-
         return v;
+    }
+
+    private class FetchDataTask extends AsyncTask<String, Void, String>{
+        protected String doInBackground(String... str){
+            InputStream in = null;
+            try {
+                URL url = new URL("https://protected-ocean-61024.herokuapp.com/event");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                in = urlConnection.getInputStream();
+                String res = readIt(in, 500);
+                return res;
+
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+                return e.toString();
+            }
+        }
+
+        protected void onPostExecute(String result) {
+            response.setText(result);
+        }
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
