@@ -7,6 +7,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 
 /**
@@ -22,6 +24,15 @@ public class Events extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+
+
+    ListView listView;
+    ArrayAdapter<String> adapter;
+    String[] events = {"Event_From_JSON_Object_1","Event_From_JSON_Object_2","Event_From_JSON_Object_3","Event_From_JSON_Object_4"};
+
+
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -64,7 +75,13 @@ public class Events extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_events, container, false);
+        //R.layout.fragment_events is the listView.
+        View view = inflater.inflate(R.layout.fragment_events,container,false);
+        listView = (ListView)view.findViewById(R.id.listView);
+        //now we have listView. To put shit in the listview
+        adapter = new ArrayAdapter<String>(getActivity(),R.layout.list_view_layout,R.id.row_item,events);
+        listView.setAdapter(adapter);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
