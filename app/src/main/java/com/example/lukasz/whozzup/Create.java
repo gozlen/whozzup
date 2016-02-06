@@ -4,9 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 /**
@@ -30,6 +42,7 @@ public class Create extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private static final String TAG = Create.class.getSimpleName();
 
     public Create() {
         // Required empty public constructor
@@ -53,6 +66,7 @@ public class Create extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +80,39 @@ public class Create extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create, container, false);
+        View v  =  inflater.inflate(R.layout.fragment_create, container, false);
+
+
+        final Button button = (Button) v.findViewById(R.id.CreateEventButton);
+        final TextView response = (TextView) v.findViewById(R.id.ResponseText);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                URL url;
+                InputStream in = null;
+                try {
+                    url = new URL("http://www.google.com");
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    in = urlConnection.getInputStream();
+                    String res = readIt(in, 500);
+                    response.setText(res);
+
+                } catch (Exception e) {
+                    Log.d(TAG, e.toString());
+                    response.setText(e.toString());
+                }
+            }
+        });
+
+        return v;
+    }
+
+    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+        Reader reader = null;
+        reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[len];
+        reader.read(buffer);
+        return new String(buffer);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
