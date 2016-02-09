@@ -34,6 +34,7 @@ import com.facebook.HttpMethod;
 import android.widget.Toast;
 import android.location.LocationListener.*;
 import com.facebook.GraphRequest.Callback;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 
 
@@ -81,11 +82,12 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        String id = AccessToken.getCurrentAccessToken().getUserId();
-        ProfilePictureView profPict;
-        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        profPict = (ProfilePictureView) headerView.findViewById(R.id.main_picture);
-        profPict.setProfileId(id);
+//        String id = AccessToken.getCurrentAccessToken().getUserId();
+//        ProfilePictureView profPict;
+//        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+//        profPict = (ProfilePictureView) headerView.findViewById(R.id.main_picture);
+//        profPict.setProfileId(id);
+
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -110,12 +112,6 @@ public class MainActivity extends AppCompatActivity
             //latituteField.setText("Location not available");
             //longitudeField.setText("Location not available");
         }
-
-
-
-        String testing = AccessToken.getCurrentAccessToken().getUserId();
-        Log.d(TAG, "this is the ID of the user");
-        Log.d(TAG, testing);
 
 
         new GraphRequest(
@@ -239,7 +235,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            LoginManager.getInstance().logOut();
+            this.finish();
+            System.exit(0);
         }
 
         fragmentManager.beginTransaction()
