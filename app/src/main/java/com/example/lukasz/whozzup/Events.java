@@ -1,7 +1,9 @@
 package com.example.lukasz.whozzup;
 
 import android.content.Context;
+import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 
 /**
@@ -20,6 +28,10 @@ import android.widget.ListView;
  * create an instance of this fragment.
  */
 public class Events extends Fragment {
+
+    public static String user_id;
+    Context thiscontext;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,7 +39,7 @@ public class Events extends Fragment {
 
 
 
-    ListView listView;
+    ListView list;
     ArrayAdapter<String> adapter;
     String[] events = {"Event_From_JSON_Object_1","Event_From_JSON_Object_2","Event_From_JSON_Object_3","Event_From_JSON_Object_4"};
 
@@ -77,19 +89,116 @@ public class Events extends Fragment {
         // Inflate the layout for this fragment
         //R.layout.fragment_events is the listView.
         View view = inflater.inflate(R.layout.fragment_events,container,false);
-        listView = (ListView)view.findViewById(R.id.listView);
-        //now we have listView. To put shit in the listview
-        adapter = new ArrayAdapter<String>(getActivity(),R.layout.list_view_layout,R.id.row_item,events);
-        listView.setAdapter(adapter);
+        list = (ListView) view.findViewById(R.id.listView);
+        thiscontext = container.getContext();
+        displayList(user_id);
+
+        //adapter = new ArrayAdapter<String>(getActivity(),R.layout.list_view_layout,R.id.row_item,events);
+        //listView.setAdapter(adapter);
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private String sendRequestToServer(){
+        //define how to connect to endpoint here
+        return null;
+    }
+    private void displayList(String user_id){
+
+
+            class Member extends AsyncTask<String, Void, String> {
+
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+
+                }
+
+                @Override
+                protected String doInBackground(String... params) {
+                    //debug
+                    System.out.println("Params at DIB are :" + params.length);
+
+                    HashMap<String, String> data = new HashMap();
+                    data.put("user_id", params[0]);
+
+                    String result = sendRequestToServer();
+                    //result contains JSON object
+                    return  result;
+                }
+
+
+                protected void onPostExecute(String result) {
+                    super.onPostExecute(result);
+                                                    //(Column names of table) Name, Tags, Brief Description,
+                    MatrixCursor matrixCursor = new MatrixCursor(new String[] {"Name", "Tags","B_Description","date"});
+                    try{
+                        JSONObject jsonObject = new JSONObject(result);//the json object
+                        JSONArray jsonArray = jsonObject.getJSONArray("Events_Array_From_JSON_Obj");
+
+
+                        // Assuming the JSONtArray from Events has these 3 columns
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            //make a JSON object for each object in the JSON returned
+                            JSONObject eventItem = jsonArray.getJSONObject(i);
+                            String name = eventItem.getString("name");
+                            String tags = eventItem.getString("tags");
+                            String B_Description = eventItem.getString("bdescription");
+                            String date = eventItem.getString("date");
+
+                            matrixCursor.addRow(new Object[]{i, name, tags,B_Description,date});
+                        }
+
+
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                   //list is the listView
+
+                    //columns is the columns of the table
+                    String[] columns = new String[]{
+                            "name",
+                            "tags",
+                            "bdescription",
+                            "date"
+                    };
+
+                    int[] to = new int[]{
+                            R.id.name,
+                            R.id.tags,
+                            R.id.bdescription,
+                            R.id.date
+
+                    };
+                    SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                            thiscontext ,//need to study
+                            R.layout.list_view_layout,
+                            matrixCursor,
+                            columns,
+                            to,
+                            0
+                    );
+                    list.setAdapter(adapter);
+                }
+
+
+
+
+
+            }//end of Member
+
+            Member user = new Member();
+            user.execute(user_id);
+
+
+    }
+ /*   // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
+*/
 
     @Override
     public void onAttach(Context context) {
