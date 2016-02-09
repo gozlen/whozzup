@@ -14,6 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +47,7 @@ public class Create extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Util util;
     private TextView response;
 
     private OnFragmentInteractionListener mListener;
@@ -54,13 +60,13 @@ public class Create extends Fragment {
     public void onStart(){
         super.onStart();
         EditText editText6=(EditText)getView().findViewById(R.id.editText6);
-        editText6.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        editText6.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus){
-                if(hasFocus){
-                    DateDialog dialog=new DateDialog(v);
-                    FragmentTransaction ft=getFragmentManager().beginTransaction();
-                    dialog.show(ft,"DatePicker");
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    DateDialog dialog = new DateDialog(v);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    dialog.show(ft, "DatePicker");
                 }
             }
         });
@@ -103,6 +109,7 @@ public class Create extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
+        util = new Util();
     }
 
     @Override
@@ -116,7 +123,20 @@ public class Create extends Fragment {
         response = (TextView) v.findViewById(R.id.ResponseText);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new FetchDataTask().execute("test");
+                new FetchDataTask().execute("https://protected-ocean-61024.herokuapp.com/event");
+
+
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/me/friends",
+                        null,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                Log.d(TAG, response.toString());
+                            }
+                        }
+                ).executeAsync();
             }
         });
         return v;
@@ -126,11 +146,11 @@ public class Create extends Fragment {
         protected String doInBackground(String... str){
             InputStream in = null;
             try {
-                URL url = new URL("https://protected-ocean-61024.herokuapp.com/event");
+                URL url = new URL(str[0]);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 in = urlConnection.getInputStream();
-                String res = readIt(in, 500);
+                String res = util.readIt(in, 500);
                 return res;
 
             } catch (Exception e) {
@@ -138,19 +158,11 @@ public class Create extends Fragment {
                 return e.toString();
             }
         }
-
         protected void onPostExecute(String result) {
             response.setText(result);
         }
     }
 
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

@@ -114,18 +114,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/me/friends",
-                null,
-                HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
-                        Log.d(TAG, response.toString());
-                    }
-                }
-        ).executeAsync();
-
 
     }
 

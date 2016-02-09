@@ -2,6 +2,7 @@ package com.example.lukasz.whozzup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -19,10 +21,18 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import android.content.Intent;
 
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Arrays;
 
 
 public class LoginActicity extends AppCompatActivity {
+    private Util util;
     private static final String TAG = LoginActicity.class.getSimpleName();
      TextView info;
      LoginButton loginButton;
@@ -57,6 +67,7 @@ public class LoginActicity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                new UserInfo().execute("https://protected-ocean-61024.herokuapp.com/user/");
                 Log.d(TAG, "Success");
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result",1);
@@ -76,6 +87,45 @@ public class LoginActicity extends AppCompatActivity {
 
         });
 
+    }
+
+    private class UserInfo extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... str){
+            InputStream in = null;
+            try {
+                DataOutputStream printout;
+                URL url = new URL(str[0]);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setRequestMethod("POST");
+
+                String id = AccessToken.getCurrentAccessToken().getUserId();
+                JSONObject info = new JSONObject();
+                info.put("id", id);
+
+                printout = new DataOutputStream(con.getOutputStream ());
+                String data = info.toString();
+                byte[] send = data.getBytes("UTF-8");
+                printout.write(send);
+                printout.flush ();
+                printout.close ();
+
+                in = con.getInputStream();
+                String res = util.readIt(in, 500);
+                return res;
+
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+                return e.toString();
+            }
+        }
+
+        protected void onPostExecute(String result) {
+            Log.d(TAG, result.toString());
+        }
     }
 
 }
