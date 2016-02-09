@@ -10,4 +10,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+        <string-array name="restriction_array">
+            <item>Public</item>
+            <item>Followers</item>
+            <item>Invite Only</item>
+            <item>Geo</item>
+        </string-array>
+
 </resources>

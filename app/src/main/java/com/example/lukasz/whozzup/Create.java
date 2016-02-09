@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.BufferedInputStream;
@@ -70,6 +72,26 @@ public class Create extends Fragment {
                 DateDialog dialog = new DateDialog(v);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 dialog.show(ft, "DatePicker");
+            }
+        });
+
+        EditText editText7=(EditText)getView().findViewById(R.id.editText7);
+        editText7.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    TimeDialog dialog = new TimeDialog(v);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    dialog.show(ft, "TimePicker");
+                }
+            }
+        });
+        editText7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimeDialog dialog = new TimeDialog(v);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                dialog.show(ft, "TimePicker");
             }
         });
     }
