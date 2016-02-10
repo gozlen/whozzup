@@ -104,7 +104,7 @@ public class LoginActicity extends AppCompatActivity {
 
                 String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
-                info.put("id", id);
+                info.put("userID", id);
 
                 printout = new DataOutputStream(con.getOutputStream ());
                 String data = info.toString();
