@@ -172,7 +172,7 @@ public class Create extends Fragment {
 
                 new GraphRequest(
                         AccessToken.getCurrentAccessToken(),
-                        "/me/friends",
+                        "/me/likes",
                         null,
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
