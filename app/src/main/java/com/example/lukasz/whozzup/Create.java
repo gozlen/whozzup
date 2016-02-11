@@ -21,7 +21,10 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -145,7 +148,26 @@ public class Create extends Fragment {
         response = (TextView) v.findViewById(R.id.ResponseText);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new FetchDataTask().execute("https://protected-ocean-61024.herokuapp.com/event");
+                EditText mEdit;
+                mEdit = (EditText) getView().findViewById(R.id.editText);
+                String category = mEdit.getText().toString();
+
+                mEdit = (EditText) getView().findViewById(R.id.editText2);
+                String title = mEdit.getText().toString();
+
+                mEdit = (EditText) getView().findViewById(R.id.editText3);
+                String description = mEdit.getText().toString();
+
+                mEdit = (EditText) getView().findViewById(R.id.editText4);
+                String location = mEdit.getText().toString();
+
+                mEdit = (EditText) getView().findViewById(R.id.editText6);
+                String date = mEdit.getText().toString();
+
+                mEdit = (EditText) getView().findViewById(R.id.editText7);
+                String time = mEdit.getText().toString();
+
+                new CreateEvent().execute("https://protected-ocean-61024.herokuapp.com/event/create/", category, title, description, location, date, time);
 
 
                 new GraphRequest(
@@ -164,14 +186,38 @@ public class Create extends Fragment {
         return v;
     }
 
-    private class FetchDataTask extends AsyncTask<String, Void, String>{
+    private class CreateEvent extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... str){
             InputStream in = null;
             try {
+                DataOutputStream printout;
                 URL url = new URL(str[0]);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                in = urlConnection.getInputStream();
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setRequestMethod("POST");
+
+                String id = AccessToken.getCurrentAccessToken().getUserId();
+                JSONObject info = new JSONObject();
+
+                info.put("creator", id);
+                info.put("category", str[1]);
+                info.put("title", str[2]);
+                info.put("description", str[3]);
+                info.put("location", str[4]);
+                info.put("date", str[5]);
+                info.put("time", str[6]);
+
+                printout = new DataOutputStream(con.getOutputStream ());
+                String data = info.toString();
+                byte[] send = data.getBytes("UTF-8");
+                printout.write(send);
+                printout.flush ();
+                printout.close ();
+
+                in = con.getInputStream();
                 String res = util.readIt(in, 500);
                 return res;
 
@@ -180,8 +226,10 @@ public class Create extends Fragment {
                 return e.toString();
             }
         }
+
         protected void onPostExecute(String result) {
             response.setText(result);
+
         }
     }
 

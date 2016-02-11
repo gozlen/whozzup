@@ -267,7 +267,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Adele says what?"
+                android:text="Create Event"
                 android:id="@+id/CreateEventButton"
                 android:layout_column="4" />
         </TableRow>

@@ -68,7 +68,6 @@ public class LoginActicity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 new UserInfo().execute("https://protected-ocean-61024.herokuapp.com/user/");
-                Log.d(TAG, "Success");
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result",1);
                 setResult(Activity.RESULT_OK, returnIntent);
