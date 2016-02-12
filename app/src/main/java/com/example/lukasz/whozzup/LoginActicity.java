@@ -17,6 +17,9 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import android.content.Intent;
@@ -124,6 +127,28 @@ public class LoginActicity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             Log.d(TAG, result.toString());
+
+            if (result.toString().equals("got it")) {
+
+
+            } else {
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/me/friends",
+                        null,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                Log.d(TAG, response.toString());
+
+                                //must update friends list
+                            }
+                        }
+                ).executeAsync();
+
+                //mut update tags/likes
+
+            }
         }
     }
 

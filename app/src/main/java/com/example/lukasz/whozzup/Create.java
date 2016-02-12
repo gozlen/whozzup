@@ -21,6 +21,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -210,6 +211,11 @@ public class Create extends Fragment {
                 info.put("date", str[5]);
                 info.put("time", str[6]);
 
+                JSONArray attendees = new JSONArray();
+                attendees.put(id);
+
+                info.put("attendees", attendees);
+
                 printout = new DataOutputStream(con.getOutputStream ());
                 String data = info.toString();
                 byte[] send = data.getBytes("UTF-8");
@@ -218,6 +224,7 @@ public class Create extends Fragment {
                 printout.close ();
 
                 in = con.getInputStream();
+
                 String res = util.readIt(in, 500);
                 return res;
 

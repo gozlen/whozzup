@@ -54,9 +54,6 @@ public class MainActivity extends AppCompatActivity
     private LocationManager locationManager;
     private String provider;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
