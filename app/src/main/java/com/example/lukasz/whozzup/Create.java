@@ -1,7 +1,9 @@
 package com.example.lukasz.whozzup;
 
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -104,6 +106,31 @@ public class Create extends Fragment {
                 dialog.show(ft, "TimePicker");
             }
         });
+
+        final EditText editText3=(EditText)getView().findViewById(R.id.editText3);
+        editText3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText input = new EditText(v.getContext());
+                input.setHeight(200);
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("Description")
+                        .setMessage("Write something about your event!")
+                        .setView(input)
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                               editText3.setText(input.getText().toString());
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        })
+                        .show();
+            }
+        });
+
+
     }
 
 
