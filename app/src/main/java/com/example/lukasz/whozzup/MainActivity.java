@@ -9,6 +9,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -37,12 +38,23 @@ import com.facebook.GraphRequest.Callback;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 // Updated your class body:
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
+    JSONArray likes;
+    private Util util;
 
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -53,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     private TextView longitudeField;
     private LocationManager locationManager;
     private String provider;
+    boolean updated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +90,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, LoginActicity.class);
             startActivityForResult(intent,1);
 
+
+
         }
+
 
 //        String id = AccessToken.getCurrentAccessToken().getUserId();
 //        ProfilePictureView profPict;
@@ -121,10 +137,34 @@ public class MainActivity extends AppCompatActivity
 
         try {
             locationManager.requestLocationUpdates(provider, 400, 0, this);
-            Log.d(TAG, "getting updates");
 
         } catch (SecurityException e) {
             Log.d(TAG, "wtf it's not working");
+        }
+
+        if(isLoggedIn() && updated == false){
+            //Log.d(TAG, "yay");
+            likes = new JSONArray();
+//                Bundle param = new Bundle();
+//                param.putString("fields", "id,item");
+//                param.putInt("limit", 100);
+
+            new GraphRequest(
+                    AccessToken.getCurrentAccessToken(),
+                    "/me/likes",
+                    null,
+                    HttpMethod.GET,
+                    graphCallback).executeAsync();
+
+//            new GraphRequest(
+//                    AccessToken.getCurrentAccessToken(),
+//                    "/me/friends",
+//                    null,
+//                    HttpMethod.GET,
+//                    graphCallback).executeAsync();
+
+            new UpdateProfile().execute("https://protected-ocean-61024.herokuapp.com/user/update/likes/");
+            updated = true;
         }
     }
 
@@ -233,4 +273,76 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private class UpdateProfile extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... str){
+            InputStream in = null;
+            try {
+                DataOutputStream printout;
+                URL url = new URL(str[0]);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setRequestMethod("POST");
+
+                String id = AccessToken.getCurrentAccessToken().getUserId();
+                JSONObject info = new JSONObject();
+                info.put("userID", id);
+                info.put("tags", likes);
+
+                //Log.d(TAG, likes.toString());
+                Log.d(TAG, info.toString());
+
+                printout = new DataOutputStream(con.getOutputStream ());
+                String data = info.toString();
+                byte[] send = data.getBytes("UTF-8");
+                printout.write(send);
+                printout.flush ();
+                printout.close ();
+
+                in = con.getInputStream();
+                String res = util.readIt(in, 500);
+                return res;
+
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+                return e.toString();
+            }
+        }
+
+        protected void onPostExecute(String result) {
+            Log.d(TAG, result.toString());
+
+        }
+    }
+
+
+
+    //setup a general callback for each graph request sent, this callback will launch the next request if exists.
+    final GraphRequest.Callback graphCallback = new GraphRequest.Callback(){
+        @Override
+        public void onCompleted(GraphResponse response) {
+            try {
+                JSONArray rawData = response.getJSONObject().getJSONArray("data");
+                for(int j=0; j<rawData.length();j++){
+                    JSONObject photo = new JSONObject();
+                    photo.put("id", ((JSONObject)rawData.get(j)).get("id"));
+                    photo.put("name", ((JSONObject)rawData.get(j)).get("name"));
+                    //Log.d(TAG, photo.toString());
+                     likes.put(photo);
+                }
+
+                //get next batch of results of exists
+                GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+                if(nextRequest != null){
+                    nextRequest.setCallback(this);
+                    nextRequest.executeAndWait();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 }
