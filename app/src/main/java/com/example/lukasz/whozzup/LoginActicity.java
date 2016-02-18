@@ -63,7 +63,7 @@ public class LoginActicity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("user_status", "user_friends", "user_events", "public_profile"));
+        loginButton.setReadPermissions(Arrays.asList("user_status", "user_friends", "user_events", "public_profile", "user_actions.music", "user_likes", "user_location"));
 
 
 
@@ -131,26 +131,16 @@ public class LoginActicity extends AppCompatActivity {
 
             if (result.toString().equals("got it")) {
 
-
             } else {
-                new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "/me/friends",
-                        null,
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-                                Log.d(TAG, response.toString());
 
-                                //must update friends list
-                            }
-                        }
-                ).executeAsync();
 
                 //mut update tags/likes
+
 
             }
         }
     }
+
+
 
 }
