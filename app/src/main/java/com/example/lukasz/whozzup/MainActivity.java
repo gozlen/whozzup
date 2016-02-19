@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity
                     JSONObject photo = new JSONObject();
                     photo.put("id", ((JSONObject)rawData.get(j)).get("id"));
                     photo.put("name", ((JSONObject)rawData.get(j)).get("name"));
-                    //Log.d(TAG, photo.toString());
+                    Log.d(TAG, photo.toString());
                      likes.put(photo);
                 }
 
@@ -338,7 +338,7 @@ public class MainActivity extends AppCompatActivity
                 GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
                 if(nextRequest != null){
                     nextRequest.setCallback(this);
-                    nextRequest.executeAndWait();
+                    nextRequest.executeAsync();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
