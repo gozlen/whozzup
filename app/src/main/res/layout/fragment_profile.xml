@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_weight="2">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,7 +32,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/name_text"
+                    android:text="Name"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/organization_text"
+                    android:text="The University of Hong Kong"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_score_text"
+                    android:text="Super User : 9874"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/events_text"
+                    android:text="Events : 100"
+                    />
+
 
             </LinearLayout>
 
@@ -40,40 +65,79 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="2">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/descriptionTextBox"
+                android:text="Description about this user : Blah blah blah blah blah. \nBlah blah blah.Blah blah blah blah blah. Blah blah blah.Blah blah blah blah blah. Blah blah blah.\nBlah blah blah blah blah. Blah blah blah.\nEmoji Emoji Emoji. Blah blah blah."
+                />
 
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
 
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <LinearLayout  android:orientation="vertical" android:layout_height="5000dp" android:layout_width="fill_parent">
-            <com.facebook.login.widget.ProfilePictureView
-                android:id="@+id/profile_picture2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start|top">
-            </com.facebook.login.widget.ProfilePictureView>
-            <com.facebook.login.widget.ProfilePictureView
-                android:id="@+id/profile_picture3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start|top">
-            </com.facebook.login.widget.ProfilePictureView>
-            <com.facebook.login.widget.ProfilePictureView
-                android:id="@+id/profile_picture4"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start|top">
-            </com.facebook.login.widget.ProfilePictureView>
-        </LinearLayout>
 
-    </ScrollView>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       android:layout_weight ="0.5">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="horizontal"
+           android:layout_weight="3">
+
+           <ListView
+               android:id="@+id/listView1"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               >
+
+           </ListView>
+
+
+       </LinearLayout>
+       <View
+           android:layout_width="fill_parent"
+           android:layout_height="3dp"
+           android:id="@+id/separator"
+           android:visibility="visible"
+           android:background="@android:color/black"/>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="horizontal"
+           android:layout_weight="2">
+
+           <ListView
+               android:id="@+id/listView2"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               >
+
+
+           </ListView>
+
+
+       </LinearLayout>
+
+   </LinearLayout>
+
 
 
 
 </LinearLayout>
+    </LinearLayout>

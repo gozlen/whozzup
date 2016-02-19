@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity
                 info.put("userID", id);
                 info.put("tags", likes);
 
-                //Log.d(TAG, likes.toString());
+                Log.d(TAG, likes.toString());
                 Log.d(TAG, info.toString());
 
                 printout = new DataOutputStream(con.getOutputStream ());

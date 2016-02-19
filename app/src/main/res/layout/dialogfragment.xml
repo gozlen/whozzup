@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/dialogfragment_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="example"/>
+
+    <Button
+        android:id="@+id/dialogfragment_acceptbtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/dialogfragment_textview"
+        android:text="accept"
+        />
+
+    <Button
+        android:id="@+id/dialogfragment_rejectbtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_alignLeft="@+id/dialogfragment_acceptbtn"
+        android:layout_below="@+id/dialogfragment_acceptbtn"
+        android:text="decline" />
+
+    <Button
+        android:id="@+id/dialogfragment_cancelbtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignLeft="@+id/dialogfragment_rejectbtn"
+        android:layout_below="@+id/dialogfragment_rejectbtn"
+        android:text="cancel" />
+
+    <Button
+        android:id="@+id/dialogfragment_heightfixhiddenbtn"
+        android:layout_width="200dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignLeft="@+id/dialogfragment_cancelbtn"
+        android:layout_below="@+id/dialogfragment_cancelbtn"
+        android:background="@android:color/transparent"
+        android:enabled="false"
+        android:text=" " />
+</RelativeLayout>

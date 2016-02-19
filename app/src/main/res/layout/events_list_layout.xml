@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:layout_width="264dp"
+        android:layout_height="31dp"
+        android:textColor="#ff0000"
+        android:id="@+id/eventID" />
+    <TextView
+        android:layout_width="264dp"
+        android:layout_height="31dp"
+        android:textColor="#ff0000"
+        android:id="@+id/eventName" />
+
+    <TextView
+        android:layout_width="264dp"
+        android:layout_height="35dp"
+        android:textColor="#ff0000"
+        android:id="@+id/eventDate" />
+
+    <TextView
+        android:layout_width="264dp"
+        android:layout_height="35dp"
+        android:textColor="#ff0000"
+        android:id="@+id/eventDescription" />
+
+
+</LinearLayout>

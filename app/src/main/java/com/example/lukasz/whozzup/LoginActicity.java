@@ -108,6 +108,7 @@ public class LoginActicity extends AppCompatActivity {
                 JSONObject info = new JSONObject();
                 info.put("userID", id);
 
+
                 printout = new DataOutputStream(con.getOutputStream ());
                 String data = info.toString();
                 byte[] send = data.getBytes("UTF-8");
