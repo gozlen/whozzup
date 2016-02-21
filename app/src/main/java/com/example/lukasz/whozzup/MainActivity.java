@@ -54,6 +54,7 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
     JSONArray likes;
+    JSONArray friends;
     private Util util;
 
     public boolean isLoggedIn() {
@@ -145,9 +146,7 @@ public class MainActivity extends AppCompatActivity
         if(isLoggedIn() && updated == false){
             //Log.d(TAG, "yay");
             likes = new JSONArray();
-//                Bundle param = new Bundle();
-//                param.putString("fields", "id,item");
-//                param.putInt("limit", 100);
+            friends = new JSONArray();
 
             new GraphRequest(
                     AccessToken.getCurrentAccessToken(),
@@ -156,12 +155,12 @@ public class MainActivity extends AppCompatActivity
                     HttpMethod.GET,
                     graphCallback).executeAsync();
 
-//            new GraphRequest(
-//                    AccessToken.getCurrentAccessToken(),
-//                    "/me/friends",
-//                    null,
-//                    HttpMethod.GET,
-//                    graphCallback).executeAsync();
+            new GraphRequest(
+                    AccessToken.getCurrentAccessToken(),
+                    "/me/friends",
+                    null,
+                    HttpMethod.GET,
+                    graphCallback2).executeAsync();
 
             new UpdateProfile().execute("https://protected-ocean-61024.herokuapp.com/user/update/likes/");
             updated = true;
@@ -291,6 +290,7 @@ public class MainActivity extends AppCompatActivity
                 JSONObject info = new JSONObject();
                 info.put("userID", id);
                 info.put("tags", likes);
+                info.put("friends", friends);
 
                 Log.d(TAG, likes.toString());
                 Log.d(TAG, info.toString());
@@ -332,6 +332,31 @@ public class MainActivity extends AppCompatActivity
                     photo.put("name", ((JSONObject)rawData.get(j)).get("name"));
                     Log.d(TAG, photo.toString());
                      likes.put(photo);
+                }
+
+                //get next batch of results of exists
+                GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+                if(nextRequest != null){
+                    nextRequest.setCallback(this);
+                    nextRequest.executeAsync();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    final GraphRequest.Callback graphCallback2 = new GraphRequest.Callback(){
+        @Override
+        public void onCompleted(GraphResponse response) {
+            try {
+                JSONArray rawData = response.getJSONObject().getJSONArray("data");
+                for(int j=0; j<rawData.length();j++){
+                    JSONObject photo = new JSONObject();
+                    photo.put("id", ((JSONObject)rawData.get(j)).get("id"));
+                    photo.put("name", ((JSONObject)rawData.get(j)).get("name"));
+                    Log.d(TAG, photo.toString());
+                    friends.put(photo);
                 }
 
                 //get next batch of results of exists
