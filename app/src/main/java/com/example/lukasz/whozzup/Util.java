@@ -89,10 +89,10 @@ public class Util {
                 String id = "";
                 if (title.equals("name")){
                     name = reader.nextString();
-                    System.out.println(name);
+//                    System.out.println(name);
                 } else if (title.equals("id")){
                     id = reader.nextString();
-                    System.out.println(id);
+//                    System.out.println(id);
                 } else{
                     reader.skipValue();
                 }
@@ -117,10 +117,10 @@ public class Util {
                 String id = "";
                 if (title.equals("name")){
                     name = reader.nextString();
-                    System.out.println(name);
+//                    System.out.println(name);
                 } else if (title.equals("id")){
                     id = reader.nextString();
-                    System.out.println(id);
+//                    System.out.println(id);
                 } else{
                     reader.skipValue();
                 }

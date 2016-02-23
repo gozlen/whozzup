@@ -65,7 +65,7 @@ public class LoginActicity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("user_status", "user_friends", "user_events", "public_profile", "user_actions.music", "user_likes", "user_location"));
+        loginButton.setReadPermissions(Arrays.asList("user_status", "user_friends", "user_events", "public_profile", "user_actions.music", "user_likes", "user_location", "user_about_me"));
 
 
 
@@ -120,6 +120,13 @@ public class LoginActicity extends AppCompatActivity {
 
                 in = con.getInputStream();
                 User user= util.readJsonStream(in);
+
+//                for (Friend friend: user.friends){
+//                    System.out.println(friend.getId());
+//                    System.out.println(friend.getName());
+//                }
+
+
                 String res = "yay";
                 return res;
 
