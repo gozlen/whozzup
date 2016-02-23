@@ -108,7 +108,7 @@ public class LoginActicity extends AppCompatActivity {
 
                 String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
-                info.put("userID", "10207041271244200");
+                info.put("userID", id);
 
 
                 printout = new DataOutputStream(con.getOutputStream ());
@@ -119,10 +119,7 @@ public class LoginActicity extends AppCompatActivity {
                 printout.close();
 
                 in = con.getInputStream();
-                List<Message> messages= util.readJsonStream(in);
-                for (Message msg: messages){
-                    Log.d(TAG, msg.toString());
-                }
+                User user= util.readJsonStream(in);
                 String res = "yay";
                 return res;
 
