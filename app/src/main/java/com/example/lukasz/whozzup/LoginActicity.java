@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,10 +33,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class LoginActicity extends AppCompatActivity {
-    private Util util;
+    private Util util = new Util();
     private static final String TAG = LoginActicity.class.getSimpleName();
      TextView info;
      LoginButton loginButton;
@@ -106,18 +108,22 @@ public class LoginActicity extends AppCompatActivity {
 
                 String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
-                info.put("userID", id);
+                info.put("userID", "10207041271244200");
 
 
                 printout = new DataOutputStream(con.getOutputStream ());
                 String data = info.toString();
                 byte[] send = data.getBytes("UTF-8");
                 printout.write(send);
-                printout.flush ();
-                printout.close ();
+                printout.flush();
+                printout.close();
 
                 in = con.getInputStream();
-                String res = util.readIt(in, 500);
+                List<Message> messages= util.readJsonStream(in);
+                for (Message msg: messages){
+                    Log.d(TAG, msg.toString());
+                }
+                String res = "yay";
                 return res;
 
             } catch (Exception e) {
@@ -127,7 +133,7 @@ public class LoginActicity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            Log.d(TAG, result.toString());
+//            Log.d(TAG, result.toString());
 
             if (result.toString().equals("got it")) {
 

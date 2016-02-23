@@ -292,8 +292,8 @@ public class MainActivity extends AppCompatActivity
                 info.put("tags", likes);
                 info.put("friends", friends);
 
-                Log.d(TAG, likes.toString());
-                Log.d(TAG, info.toString());
+//                Log.d(TAG, likes.toString());
+//                Log.d(TAG, info.toString());
 
                 printout = new DataOutputStream(con.getOutputStream ());
                 String data = info.toString();
@@ -307,13 +307,13 @@ public class MainActivity extends AppCompatActivity
                 return res;
 
             } catch (Exception e) {
-                Log.d(TAG, e.toString());
+//                Log.d(TAG, e.toString());
                 return e.toString();
             }
         }
 
         protected void onPostExecute(String result) {
-            Log.d(TAG, result.toString());
+//            Log.d(TAG, result.toString());
 
         }
     }
@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity
                     JSONObject photo = new JSONObject();
                     photo.put("id", ((JSONObject)rawData.get(j)).get("id"));
                     photo.put("name", ((JSONObject)rawData.get(j)).get("name"));
-                    Log.d(TAG, photo.toString());
+//                    Log.d(TAG, photo.toString());
                      likes.put(photo);
                 }
 
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity
                     JSONObject photo = new JSONObject();
                     photo.put("id", ((JSONObject)rawData.get(j)).get("id"));
                     photo.put("name", ((JSONObject)rawData.get(j)).get("name"));
-                    Log.d(TAG, photo.toString());
+//                    Log.d(TAG, photo.toString());
                     friends.put(photo);
                 }
 

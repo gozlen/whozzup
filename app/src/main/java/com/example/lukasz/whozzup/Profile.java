@@ -151,7 +151,9 @@ public class Profile extends Fragment {
                 printout.close ();
 
                 in = con.getInputStream();
-                String res = util.readIt(in, 500);
+                Log.d(TAG, "......................................................................");
+                String res = util.readJsonStream(in).toString();
+                Log.d(TAG, res);
                 return res;
 
             } catch (Exception e) {
@@ -199,7 +201,7 @@ public class Profile extends Fragment {
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
-                                Log.d(TAG, response.toString());
+//                                Log.d(TAG, response.toString());
 
                                 //must update friends list
                             }
@@ -245,7 +247,7 @@ public class Profile extends Fragment {
                 return res;
 
             } catch (Exception e) {
-                Log.d(TAG, e.toString());
+//                Log.d(TAG, e.toString());
                 return e.toString();
             }
         }
@@ -278,7 +280,7 @@ public class Profile extends Fragment {
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
-                                Log.d(TAG, response.toString());
+//                                Log.d(TAG, response.toString());
 
                                 //must update friends list
                             }
@@ -327,7 +329,7 @@ public class Profile extends Fragment {
                 return res;
 
             } catch (Exception e) {
-                Log.d(TAG, e.toString());
+//                Log.d(TAG, e.toString());
                 return e.toString();
             }
         }
@@ -355,7 +357,7 @@ public class Profile extends Fragment {
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
-                                Log.d(TAG, response.toString());
+//                                Log.d(TAG, response.toString());
 
                                 //must update friends list
                             }
