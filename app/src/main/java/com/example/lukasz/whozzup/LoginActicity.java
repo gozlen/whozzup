@@ -129,11 +129,9 @@ public class LoginActicity extends AppCompatActivity {
 
                 User user = glob.getGlobalVarValue();
 
-
-                //Log.d(TAG, "............");
-                for (Friend friend: user.friends){
-                    System.out.println(friend.getId());
-                    System.out.println(friend.getName());
+                for (Like like: user.likes){
+                    System.out.println(like.getId());
+                    System.out.println(like.getName());
                 }
 
 

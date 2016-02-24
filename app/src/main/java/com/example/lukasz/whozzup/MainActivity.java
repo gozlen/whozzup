@@ -1,20 +1,15 @@
 package com.example.lukasz.whozzup;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -33,10 +28,8 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import android.widget.Toast;
-import android.location.LocationListener.*;
-import com.facebook.GraphRequest.Callback;
+
 import com.facebook.login.LoginManager;
-import com.facebook.login.widget.ProfilePictureView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
     JSONArray likes;
     JSONArray friends;
-    private Util util;
+    private Util util = new Util();
 
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -163,6 +156,7 @@ public class MainActivity extends AppCompatActivity
                     graphCallback2).executeAsync();
 
             new UpdateProfile().execute("https://protected-ocean-61024.herokuapp.com/user/update/likes/");
+            new UserInfo().execute("https://protected-ocean-61024.herokuapp.com/user/");
             updated = true;
         }
     }
@@ -255,10 +249,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_create) {
             fragment = new Create();
         } else if (id == R.id.nav_friends) {
-            fragment = new ItemFragment();
+            fragment = new FriendListFragment();
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_exit) {
             LoginManager.getInstance().logOut();
             this.finish();
             System.exit(0);
@@ -316,6 +310,56 @@ public class MainActivity extends AppCompatActivity
 //            Log.d(TAG, result.toString());
 
         }
+    }
+
+    private class UserInfo extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... str) {
+            InputStream in = null;
+            try {
+                DataOutputStream printout;
+                URL url = new URL(str[0]);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setRequestMethod("POST");
+
+                String id = AccessToken.getCurrentAccessToken().getUserId();
+                JSONObject info = new JSONObject();
+                info.put("userID", id);
+
+
+                printout = new DataOutputStream(con.getOutputStream());
+                String data = info.toString();
+                byte[] send = data.getBytes("UTF-8");
+                printout.write(send);
+                printout.flush();
+                printout.close();
+
+                in = con.getInputStream();
+
+                globals glob = ((globals) getApplicationContext());
+                glob.setGlobalVarValue(util.readJsonStream(in));
+
+
+                User user = glob.getGlobalVarValue();
+
+                for (Like like : user.likes) {
+                    System.out.println(like.getId());
+                    System.out.println(like.getName());
+                }
+
+
+                String res = "yay";
+                return res;
+
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+                return e.toString();
+            }
+        }
+
     }
 
 
