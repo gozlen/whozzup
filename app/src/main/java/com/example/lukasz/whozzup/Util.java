@@ -36,7 +36,7 @@ public class Util {
 
 
     public User readJsonStream(InputStream in) throws IOException {
-        System.out.println("READING USER STREAM");
+
         User user;
 
         Gson gson = new Gson();
