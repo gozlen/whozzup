@@ -116,7 +116,7 @@ public class Profile extends Fragment {
         //events that the user has created
         new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", AccessToken.getCurrentAccessToken().getUserId());
         //events that the user is attending - userID
-        //new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", AccessToken.getCurrentAccessToken().getUserId());
+        new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", AccessToken.getCurrentAccessToken().getUserId());
 
         return rootView;
 
@@ -167,64 +167,25 @@ public class Profile extends Fragment {
         protected void onPostExecute(User result) {
             System.out.println("RESULT HERE\n");
 
-            MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "Name","Organization","NoEvents"});
             try{
 
                 descriptionText.setText(result.description.toString());
-                System.out.println("Accessing result string here : "+result.toStringCustom());
-                //JSONObject jsonObject = new JSONObject(result);//the json object
-                //System.out.println(jsonObject.toString());
-                //JSONArray jsonArray = jsonObject.getJSONArray("Name_of_JSONArray_here");
-
-                // Assuming the JSONtArray from Members has these 3 columns
-                /*for (int i = 0; i < jsonArray.length(); i++) {
-                    //make a JSON object for each object in the JSON returned
-                    JSONObject budgetItem = jsonArray.getJSONObject(i);
-                    String member = budgetItem.getString("member");
-                    String description = budgetItem.getString("description");
-                    String amount = budgetItem.getString("amount");
-                    //row no, member, ... etc
-                    matrixCursor.addRow(new Object[]{i, member, description,amount});
-                }*/
-
+                //Fill up other data here
 
             } catch (Exception e){
                 e.printStackTrace();
             }
 
-            //System.out.println(result.toString());
-            //Log.d(TAG, result.toString());
-
-
-            if (result.toString().equals("got it")) {
-
-
-            } else {
-               /* new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "/me/friends",
-                        null,
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-//                                Log.d(TAG, response.toString());
-
-                                //must update friends list
-                            }
-                        }
-                ).executeAsync();*/
-
-                //mut update tags/likes
-
-            }
 
         }
     }
 
 
-    private class eventsCreated extends AsyncTask<String, Void, String> {
-        protected String doInBackground(String... str){
+    private class eventsCreated extends AsyncTask<String, Void, List<Events_Obj>> {
+        //private class eventsCreated extends AsyncTask<String, Void, String> {
+        protected List<Events_Obj> doInBackground(String... str){
             InputStream in = null;
+            List<Events_Obj> eventsList = new ArrayList<Events_Obj>();
             try {
                 DataOutputStream printout;
                 URL url = new URL(str[0]);
@@ -246,63 +207,183 @@ public class Profile extends Fragment {
                 byte[] send = data.getBytes("UTF-8");
                 printout.write(send);
                 printout.flush();
-                printout.close ();
+                printout.close();
                 Util util = new Util();
                 in = con.getInputStream();
-                List<Events_Obj> eventsList = new ArrayList<Events_Obj>();
+
                 eventsList = util.readEventsJsonStream(in);
-                return new String("OKKKKKKKKK");
+                System.out.println(eventsList.size());
+                return eventsList;
+
 
             } catch (Exception e) {
                 Log.d(TAG, e.toString());
-                return e.toString();
+               return eventsList;
             }
         }
 
-        protected void onPostExecute(String result) {
-            System.out.println("EVENTS_RESULT HERE\n");
-            System.out.println("HERE "+result.toString());
+        protected void onPostExecute(List<Events_Obj> result) {
+           // System.out.println("EVENTS_RESULT HERE\n");
+
+
+            JSONArray jsonArray = new JSONArray();
             try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("Events");
-                System.out.println( jsonArray.toString());
-            }catch (Exception e){
-                System.out.println("ERROR WITH JSON");
-                System.out.println(e.toString());
 
-
+                for (int i=0; i < result.size(); i++) {
+                jsonArray.put(result.get(i).getJSONObject());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            //System.out.println(jsonArray.toString());
+            ListView listView1 = (ListView) getView().findViewById(R.id.listView1);
+           try{
+               MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "eventTitle","eventCategory","eventDescription","eventLocation","eventDate","eventTime","eventAttendees"});
 
-            //Log.d(TAG, result.toString());
-
-
-            if (result.toString().equals("got it")) {
-
-
-            } else {
-              /*  new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "/me/friends",
-                        null,
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-//                                Log.d(TAG, response.toString());
-
-                                //must update friends list
-                            }
-                        }
-                ).executeAsync();*/
-
-                //mut update tags/likes
-
+               // Assuming the JSONtArray from Members has these 3 columns
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    //make a JSON object for each object in the JSON returned
+                    JSONObject todoItem = jsonArray.getJSONObject(i);
+                    String title = todoItem.getString("Title");
+                    String cat = todoItem.getString("Category");
+                    String des = todoItem.getString("Description");
+                    String loc = todoItem.getString("Location");
+                    String date = todoItem.getString("Date");
+                    String time = todoItem.getString("Time");
+                    String atten = "Attendees "+i;
+                    //String atten = todoItem.getString("Attendees");
+                    matrixCursor.addRow(new Object[]{i, title,cat,des,loc,date,time,atten});
+                }
+               fillListView(1,matrixCursor);
+            } catch (Exception e)
+            {  e.printStackTrace();
             }
 
         }
-    }
+    }//end of class eventsCreated extends AsyncTask
+
+
+    private class eventsInterested extends AsyncTask<String, Void, List<Events_Obj>> {
+       protected List<Events_Obj> doInBackground(String... str){
+            InputStream in = null;
+            List<Events_Obj> eventsList = new ArrayList<Events_Obj>();
+            try {
+                DataOutputStream printout;
+                URL url = new URL(str[0]);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setRequestMethod("POST");
+
+                String id = AccessToken.getCurrentAccessToken().getUserId();
+                JSONObject info = new JSONObject();
+                info.put("userID", id);
 
 
 
+                printout = new DataOutputStream(con.getOutputStream ());
+                String data = info.toString();
+                byte[] send = data.getBytes("UTF-8");
+                printout.write(send);
+                printout.flush();
+                printout.close();
+                Util util = new Util();
+                in = con.getInputStream();
+
+                eventsList = util.readEventsJsonStream(in);
+                System.out.println(eventsList.size());
+                return eventsList;
+
+
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+                return eventsList;
+            }
+        }
+
+        protected void onPostExecute(List<Events_Obj> result) {
+            System.out.println("EVENTS_RESULT HERE\n");
+
+
+            JSONArray jsonArray = new JSONArray();
+            try {
+
+                for (int i=0; i < result.size(); i++) {
+                    jsonArray.put(result.get(i).getJSONObject());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //System.out.println(jsonArray.toString());
+            ListView listView1 = (ListView) getView().findViewById(R.id.listView1);
+            try{
+                MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "eventTitle","eventCategory","eventDescription","eventLocation","eventDate","eventTime","eventAttendees"});
+
+                // Assuming the JSONtArray from Members has these 3 columns
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    //make a JSON object for each object in the JSON returned
+                    JSONObject todoItem = jsonArray.getJSONObject(i);
+                    String title = todoItem.getString("Title");
+                    String cat = todoItem.getString("Category");
+                    String des = todoItem.getString("Description");
+                    String loc = todoItem.getString("Location");
+                    String date = todoItem.getString("Date");
+                    String time = todoItem.getString("Time");
+                    String atten = "Attendees "+i;
+                    //String atten = todoItem.getString("Attendees");
+                    matrixCursor.addRow(new Object[]{i, title,cat,des,loc,date,time,atten});
+                }
+                fillListView(2,matrixCursor);
+            } catch (Exception e)
+            {  e.printStackTrace();
+            }
+
+        }
+    }//end of class eventsInterested extends AsyncTask 2
+
+    public void fillListView(int listViewNumber,MatrixCursor matrixCursor){
+        if(listViewNumber == 1){
+        list = (ListView) getView().findViewById(R.id.listView1);
+        }
+        else{
+            list = (ListView) getView().findViewById(R.id.listView2);
+        }
+
+        String[] columns = new String[]{
+                "_id",
+                "eventTitle",
+                "eventCategory",
+                "eventDescription",
+                "eventLocation",
+                "eventDate",
+                "eventTime",
+                "eventAttendees"
+
+        };
+
+        int[] to = new int[]{
+                R.id.eventID,
+                R.id.eventTitle,
+                R.id.eventCategory,
+                R.id.eventDescription,
+                R.id.eventLocation,
+                R.id.eventDate,
+                R.id.eventTime,
+                R.id.eventAttendees,
+
+        };
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                context,
+                R.layout.events_list_layout,
+                matrixCursor,
+                columns,
+                to,
+                0
+        );
+        list.setAdapter(adapter);
+    }//end of fillListView
 
     private class updateDescription extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... str){
@@ -342,38 +423,17 @@ public class Profile extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-            Toast.makeText(context , result.toString(),Toast.LENGTH_SHORT).show();
-            if(result.toString() == "1"){
+
+            if(result.substring(0,1).equals(new String("1"))){
                 Toast.makeText(context , "Description Updated.",Toast.LENGTH_SHORT).show();
 
             }else{
                 Toast.makeText(context , "Update Failed. Try again.",Toast.LENGTH_SHORT).show();
                 descriptionText.setText(descriptionContent);
-
-            }
-
-
-            if (result.toString().equals("got it")) {
+                }
 
 
-            } else {
-                new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "/me/friends",
-                        null,
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-//                                Log.d(TAG, response.toString());
 
-                                //must update friends list
-                            }
-                        }
-                ).executeAsync();
-
-                //mut update tags/likes
-
-            }
 
         }
     }
@@ -432,7 +492,6 @@ public class Profile extends Fragment {
                                 descriptionContent = descriptionText.getText().toString();
                                 descriptionText.setText(input.getText().toString());
                                 //function to connect to DB and send data
-
                                 new updateDescription().execute("https://protected-ocean-61024.herokuapp.com/user/update/description/", input.getText().toString());
 
                             }
@@ -472,7 +531,7 @@ public class Profile extends Fragment {
 
         int[] to = new int[]{
                 R.id.eventID,
-                R.id.eventName,
+                R.id.eventTitle,
                 R.id.eventDate,
                 R.id.eventDescription
 
@@ -516,7 +575,7 @@ public class Profile extends Fragment {
 
         to = new int[]{
                 R.id.eventID,
-                R.id.eventName,
+                R.id.eventTitle,
                 R.id.eventDate,
                 R.id.eventDescription
 

@@ -39,63 +39,81 @@ public class Util {
 
     public List<Events_Obj> readEventsJsonStream(InputStream in) throws IOException {
 
-        List<Events_Obj> eventsList ;
-
+        List<Events_Obj> eventsList = new ArrayList<>();
+        Events_Obj event = new Events_Obj();
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
 
        reader.beginArray();
-        System.out.println("Marker for beginArray");
-        eventsList = readEventInfo(reader);
+        //System.out.println("Marker for beginArray");
+        while(reader.hasNext()) {
+            event = readEventInfo(reader);
+            eventsList.add(event);
+        }
         reader.endArray();
-        System.out.println("successfully parsed user data");
+
 
         return eventsList;
 
     }
 
 
-    public List<Events_Obj> readEventInfo(JsonReader reader) throws IOException{
-        List<Events_Obj> eventsList = new ArrayList<Events_Obj>();
+    public Events_Obj readEventInfo(JsonReader reader) throws IOException{
+
 
         Events_Obj event = new Events_Obj();
-        System.out.println("BEGIN OBJECT");
+        //System.out.println("BEGIN OBJECT");
+
 
         reader.beginObject();
-
-        while(reader.hasNext()){
+        while (reader.hasNext()) {
 
             String name = reader.nextName();
 
-           if (name.equals("description") && reader.peek() != JsonToken.NULL) {
-                System.out.println("got description 1");
+            if (name.equals("description") && reader.peek() != JsonToken.NULL) {
+                //System.out.println("got description");
+                event.event_description = reader.nextString();
 
             } else if (name.equals("date")) {
-                System.out.println("got date");
+                //System.out.println("got date");
                 event.event_date = reader.nextString();
-           } else if (name.equals("time")) {
-               System.out.println("got time");
-               event.event_time = reader.nextString();
-           }  else if (name.equals("description")) {
-                System.out.println("got description");
-               event.event_description = reader.nextString();;
-           } else if (name.equals("attendees")) {
-                System.out.println("got attendess");
-                event.event_attendees = reader.nextString();
+            } else if (name.equals("time")) {
+                //System.out.println("got time");
+                event.event_time = reader.nextString();
+            } else if (name.equals("location")) {
+               // System.out.println("got location");
+                event.event_location = reader.nextString();
+            } else if (name.equals("title")) {
+               // System.out.println("got title");
+                event.event_title = reader.nextString();
+            } else if (name.equals("restrictions")) {
+                System.out.println("got restrictions");
+                event.event_restrictions = reader.nextString();
+
+            } else if (name.equals("category")) {
+                //System.out.println("got category");
+                event.event_category = reader.nextString();
+
+            } else if (name.equals("attendees")) {
+                //System.out.println("got attendess");
+                List<String> att= new ArrayList<String>();
+                    reader.beginArray();
+                        while (reader.hasNext()) {
+                        //System.out.println("Att Sting: " + reader.nextString());
+                            att.add(reader.nextString());
+                        }
+                    reader.endArray();
+                    event.event_attendees = att;
 
             } else {
-               reader.skipValue();
+                reader.skipValue();
             }
 
-            eventsList.add(event);
+
 
         }//end of while(reader.hasNext())
         reader.endObject();
 
-
-        System.out.println("SIZE " + eventsList.size());
-        System.out.println();
-
-        return eventsList;
+        return event;
     }
 
 

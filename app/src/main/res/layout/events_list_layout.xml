@@ -13,19 +13,39 @@
         android:layout_width="264dp"
         android:layout_height="31dp"
         android:textColor="#ff0000"
-        android:id="@+id/eventName" />
+        android:id="@+id/eventTitle" />
 
     <TextView
         android:layout_width="264dp"
         android:layout_height="35dp"
         android:textColor="#ff0000"
-        android:id="@+id/eventDate" />
+        android:id="@+id/eventCategory" />
 
     <TextView
         android:layout_width="264dp"
         android:layout_height="35dp"
         android:textColor="#ff0000"
         android:id="@+id/eventDescription" />
+    <TextView
+        android:layout_width="264dp"
+        android:layout_height="35dp"
+        android:textColor="#ff0000"
+        android:id="@+id/eventLocation" />
+    <TextView
+        android:layout_width="264dp"
+        android:layout_height="35dp"
+        android:textColor="#ff0000"
+        android:id="@+id/eventDate" />
+    <TextView
+        android:layout_width="264dp"
+        android:layout_height="35dp"
+        android:textColor="#ff0000"
+        android:id="@+id/eventTime" />
+    <TextView
+        android:layout_width="264dp"
+        android:layout_height="35dp"
+        android:textColor="#ff0000"
+        android:id="@+id/eventAttendees" />
 
 
 </LinearLayout>
