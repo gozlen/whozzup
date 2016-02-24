@@ -17,8 +17,8 @@ public class User {
 
         return "ID "+id
                 +"Name: "+name
-                +"Description "+ description
-                +"Likes "+likes.toString()
-                +"Friends "+friends.toString();
+                +" Description "+ description
+                +" Likes "+likes.toString()
+                +" Friends "+friends.toString();
     }
 }

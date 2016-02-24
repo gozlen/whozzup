@@ -124,9 +124,11 @@ public class Profile extends Fragment {
 
     }
 
-    private class fillData extends AsyncTask<String, Void, String> {
-        protected String doInBackground(String... str){
+    private class fillData extends AsyncTask<String, Void, User> {
+        protected User doInBackground(String... str){
             InputStream in = null;
+            User usr = null;
+            Util util = new Util();
             try {
                 DataOutputStream printout;
                 URL url = new URL(str[0]);
@@ -152,28 +154,30 @@ public class Profile extends Fragment {
 
                 in = con.getInputStream();
                //Not null - tested
-               User usr ;
+
                usr = util.readJsonStream(in);
                 if(usr.equals(null) || (usr==null)){
                     Log.d(TAG,"SHIT IS NULL");
                 }
-
-                return usr.toStringCustom();
+                return usr;
 
             } catch (Exception e) {
                 Log.d(TAG, e.toString());
-                return e.toString();
+                return usr;
             }
         }
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(User result) {
             System.out.println("RESULT HERE\n");
+
             MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "Name","Organization","NoEvents"});
             try{
-                System.out.println("Accessing result string here : "+result.toString());
-                JSONObject jsonObject = new JSONObject(result);//the json object
-                System.out.println(jsonObject.toString());
-                JSONArray jsonArray = jsonObject.getJSONArray("Name_of_JSONArray_here");
+
+                descriptionText.setText(result.description.toString());
+                System.out.println("Accessing result string here : "+result.toStringCustom());
+                //JSONObject jsonObject = new JSONObject(result);//the json object
+                //System.out.println(jsonObject.toString());
+                //JSONArray jsonArray = jsonObject.getJSONArray("Name_of_JSONArray_here");
 
                 // Assuming the JSONtArray from Members has these 3 columns
                 /*for (int i = 0; i < jsonArray.length(); i++) {
