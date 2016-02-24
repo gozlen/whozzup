@@ -113,7 +113,7 @@ public class Profile extends Fragment {
         new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", AccessToken.getCurrentAccessToken().getUserId());
 
         //events that the user has created
-       new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", AccessToken.getCurrentAccessToken().getUserId());
+        //new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", AccessToken.getCurrentAccessToken().getUserId());
         //events that the user is attending - userID
         //new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", AccessToken.getCurrentAccessToken().getUserId());
 
@@ -147,13 +147,18 @@ public class Profile extends Fragment {
                 String data = info.toString();
                 byte[] send = data.getBytes("UTF-8");
                 printout.write(send);
-                printout.flush ();
+                printout.flush();
                 printout.close ();
 
                 in = con.getInputStream();
-                Log.d(TAG, "......................................................................");
-                String res = util.readJsonStream(in).toString();
-                Log.d(TAG, res);
+               //Not null - tested
+               User usr ;
+               usr = util.readJsonStream(in);
+                if(usr.equals(null) || (usr==null)){
+                    Log.d(TAG,"SHIT IS NULL");
+                }
+              System.out.println(usr.name + " shita  " + usr.description + "   " + usr.id);
+               String res = usr.name+" shita  "+usr.description+"   "+usr.id;
                 return res;
 
             } catch (Exception e) {
@@ -166,6 +171,7 @@ public class Profile extends Fragment {
             System.out.println("RESULT HERE\n");
             MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "Name","Organization","NoEvents"});
             try{
+                System.out.println(result.toString());
                 JSONObject jsonObject = new JSONObject(result);//the json object
                 System.out.println(jsonObject.toString());
                 JSONArray jsonArray = jsonObject.getJSONArray("Name_of_JSONArray_here");
@@ -194,7 +200,7 @@ public class Profile extends Fragment {
 
 
             } else {
-                new GraphRequest(
+               /* new GraphRequest(
                         AccessToken.getCurrentAccessToken(),
                         "/me/friends",
                         null,
@@ -206,7 +212,7 @@ public class Profile extends Fragment {
                                 //must update friends list
                             }
                         }
-                ).executeAsync();
+                ).executeAsync();*/
 
                 //mut update tags/likes
 
