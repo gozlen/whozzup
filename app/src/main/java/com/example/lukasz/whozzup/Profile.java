@@ -157,9 +157,8 @@ public class Profile extends Fragment {
                 if(usr.equals(null) || (usr==null)){
                     Log.d(TAG,"SHIT IS NULL");
                 }
-              System.out.println(usr.name + " shita  " + usr.description + "   " + usr.id);
-               String res = usr.name+" shita  "+usr.description+"   "+usr.id;
-                return res;
+
+                return usr.toStringCustom();
 
             } catch (Exception e) {
                 Log.d(TAG, e.toString());
@@ -171,7 +170,7 @@ public class Profile extends Fragment {
             System.out.println("RESULT HERE\n");
             MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "Name","Organization","NoEvents"});
             try{
-                System.out.println(result.toString());
+                System.out.println("Accessing result string here : "+result.toString());
                 JSONObject jsonObject = new JSONObject(result);//the json object
                 System.out.println(jsonObject.toString());
                 JSONArray jsonArray = jsonObject.getJSONArray("Name_of_JSONArray_here");
