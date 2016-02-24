@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * Created by Lukasz on 2/24/2016.
  */
-public class ListAdapter extends ArrayAdapter<Friend> {
+public class FriendListAdapter extends ArrayAdapter<Friend> {
 
-    public ListAdapter(Context context, int textViewResourceId) {
+    public FriendListAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
-    public ListAdapter(Context context, int resource, List<Friend> items) {
+    public FriendListAdapter(Context context, int resource, List<Friend> items) {
         super(context, resource, items);
     }
 

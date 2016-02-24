@@ -9,5 +9,5 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.lukasz.whozzup.ItemFragment"
+    tools:context=".FriendListFragment"
     tools:listitem="@layout/fragment_item" />
