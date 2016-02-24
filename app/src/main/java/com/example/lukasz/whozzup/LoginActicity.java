@@ -63,6 +63,7 @@ public class LoginActicity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("user_status", "user_friends", "user_events", "public_profile", "user_actions.music", "user_likes", "user_location", "user_about_me"));
@@ -119,12 +120,21 @@ public class LoginActicity extends AppCompatActivity {
                 printout.close();
 
                 in = con.getInputStream();
-                User user= util.readJsonStream(in);
 
-//                for (Friend friend: user.friends){
-//                    System.out.println(friend.getId());
-//                    System.out.println(friend.getName());
-//                }
+                globals glob = ((globals)getApplicationContext());
+                glob.setGlobalVarValue(util.readJsonStream(in));
+
+
+
+
+                User user = glob.getGlobalVarValue();
+
+
+                //Log.d(TAG, "............");
+                for (Friend friend: user.friends){
+                    System.out.println(friend.getId());
+                    System.out.println(friend.getName());
+                }
 
 
                 String res = "yay";
