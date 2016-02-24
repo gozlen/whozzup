@@ -13,7 +13,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -34,6 +37,69 @@ public class Util {
         return new String(buffer);
     }
 
+    public List<Events_Obj> readEventsJsonStream(InputStream in) throws IOException {
+
+        List<Events_Obj> eventsList ;
+
+        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+
+       reader.beginArray();
+        System.out.println("Marker for beginArray");
+        eventsList = readEventInfo(reader);
+        reader.endArray();
+        System.out.println("successfully parsed user data");
+
+        return eventsList;
+
+    }
+
+
+    public List<Events_Obj> readEventInfo(JsonReader reader) throws IOException{
+        List<Events_Obj> eventsList = new ArrayList<Events_Obj>();
+
+        Events_Obj event = new Events_Obj();
+        System.out.println("BEGIN OBJECT");
+
+        reader.beginObject();
+
+        while(reader.hasNext()){
+
+            String name = reader.nextName();
+
+           if (name.equals("description") && reader.peek() != JsonToken.NULL) {
+                System.out.println("got description 1");
+
+            } else if (name.equals("date")) {
+                System.out.println("got date");
+                event.event_date = reader.nextString();
+           } else if (name.equals("time")) {
+               System.out.println("got time");
+               event.event_time = reader.nextString();
+           }  else if (name.equals("description")) {
+                System.out.println("got description");
+               event.event_description = reader.nextString();;
+           } else if (name.equals("attendees")) {
+                System.out.println("got attendess");
+                event.event_attendees = reader.nextString();
+
+            } else {
+               reader.skipValue();
+            }
+
+            eventsList.add(event);
+
+        }//end of while(reader.hasNext())
+        reader.endObject();
+
+
+        System.out.println("SIZE " + eventsList.size());
+        System.out.println();
+
+        return eventsList;
+    }
+
+
+
 
     public User readJsonStream(InputStream in) throws IOException {
 
@@ -46,7 +112,7 @@ public class Util {
         user = readUserInfo(reader);
         reader.endArray();
 
-        System.out.println("successfully parsed user data");
+        //System.out.println("successfully parsed user data");
         return user;
 
     }
@@ -57,16 +123,15 @@ public class Util {
         while(reader.hasNext()){
             String name = reader.nextName();
             if (name.equals("tags") && reader.peek() != JsonToken.NULL) {
-                System.out.println("got tags");
                 user.likes = readTagsArray(reader);
             } else if (name.equals("description")) {
-                System.out.println("got description");
+                //System.out.println("got description");
                 user.description = reader.nextString();
             } else if (name.equals("userID")) {
-                System.out.println("got user id");
+                //System.out.println("got user id");
                 user.id = reader.nextString();
             } else if (name.equals("friends")) {
-                System.out.println("got friends");
+                //System.out.println("got friends");
                 user.friends = readFriendsArray(reader);
             } else {
                 reader.skipValue();
@@ -74,11 +139,12 @@ public class Util {
         }
         reader.endObject();
 
+
         return user;
     }
 
     public List<Like> readTagsArray(JsonReader reader) throws IOException{
-        System.out.println("READING TAGS");
+       // System.out.println("READING TAGS");
         List<Like> likes = new ArrayList<>();
         reader.beginArray();
         while (reader.hasNext()){
@@ -90,10 +156,10 @@ public class Util {
                 String title = reader.nextName();
                 if (title.equals("name")){
                     name = reader.nextString();
-//                    System.out.println(name);
+//                   // System.out.println(name);
                 } else if (title.equals("id")){
                     id = reader.nextString();
-//                    System.out.println(id);
+//                   // System.out.println(id);
                 } else{
                     reader.skipValue();
                 }
@@ -108,7 +174,7 @@ public class Util {
     }
 
     public List<Friend> readFriendsArray(JsonReader reader) throws IOException{
-        System.out.println("READING TAGS");
+        //System.out.println("READING TAGS");
         List<Friend> likes = new ArrayList<>();
         reader.beginArray();
         while (reader.hasNext()){
@@ -120,10 +186,10 @@ public class Util {
                 String title = reader.nextName();
                 if (title.equals("name")){
                     name = reader.nextString();
-//                    System.out.println(name);
+
                 } else if (title.equals("id")){
                     id = reader.nextString();
-//                    System.out.println(id);
+
                 } else{
                     reader.skipValue();
                 }

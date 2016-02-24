@@ -345,10 +345,10 @@ public class MainActivity extends AppCompatActivity
 
                 User user = glob.getGlobalVarValue();
 
-                for (Like like : user.likes) {
+               /* for (Like like : user.likes) {
                     System.out.println(like.getId());
                     System.out.println(like.getName());
-                }
+                }*/
 
 
                 String res = "yay";

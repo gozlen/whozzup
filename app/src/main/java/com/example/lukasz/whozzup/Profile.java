@@ -45,6 +45,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -113,7 +114,7 @@ public class Profile extends Fragment {
         new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", AccessToken.getCurrentAccessToken().getUserId());
 
         //events that the user has created
-        //new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", AccessToken.getCurrentAccessToken().getUserId());
+        new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", AccessToken.getCurrentAccessToken().getUserId());
         //events that the user is attending - userID
         //new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", AccessToken.getCurrentAccessToken().getUserId());
 
@@ -153,12 +154,8 @@ public class Profile extends Fragment {
                 printout.close ();
 
                 in = con.getInputStream();
-               //Not null - tested
+                usr = util.readJsonStream(in);
 
-               usr = util.readJsonStream(in);
-                if(usr.equals(null) || (usr==null)){
-                    Log.d(TAG,"SHIT IS NULL");
-                }
                 return usr;
 
             } catch (Exception e) {
@@ -248,22 +245,23 @@ public class Profile extends Fragment {
                 String data = info.toString();
                 byte[] send = data.getBytes("UTF-8");
                 printout.write(send);
-                printout.flush ();
+                printout.flush();
                 printout.close ();
-
+                Util util = new Util();
                 in = con.getInputStream();
-                String res = util.readIt(in, 500);
-                return res;
+                List<Events_Obj> eventsList = new ArrayList<Events_Obj>();
+                eventsList = util.readEventsJsonStream(in);
+                return new String("OKKKKKKKKK");
 
             } catch (Exception e) {
-//                Log.d(TAG, e.toString());
+                Log.d(TAG, e.toString());
                 return e.toString();
             }
         }
 
         protected void onPostExecute(String result) {
             System.out.println("EVENTS_RESULT HERE\n");
-            System.out.println(result.toString());
+            System.out.println("HERE "+result.toString());
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = jsonObject.getJSONArray("Events");
@@ -282,7 +280,7 @@ public class Profile extends Fragment {
 
 
             } else {
-                new GraphRequest(
+              /*  new GraphRequest(
                         AccessToken.getCurrentAccessToken(),
                         "/me/friends",
                         null,
@@ -294,7 +292,7 @@ public class Profile extends Fragment {
                                 //must update friends list
                             }
                         }
-                ).executeAsync();
+                ).executeAsync();*/
 
                 //mut update tags/likes
 
