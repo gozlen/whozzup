@@ -254,8 +254,8 @@ public class MainActivity extends AppCompatActivity
             fragment = new Events();
         } else if (id == R.id.nav_create) {
             fragment = new Create();
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_friends) {
+            fragment = new ItemFragment();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

@@ -83,10 +83,11 @@ public class Util {
         reader.beginArray();
         while (reader.hasNext()){
             reader.beginObject();
+
+            String name = "";
+            String id = "";
             while (reader.hasNext()){
                 String title = reader.nextName();
-                String name = "";
-                String id = "";
                 if (title.equals("name")){
                     name = reader.nextString();
 //                    System.out.println(name);
@@ -96,8 +97,9 @@ public class Util {
                 } else{
                     reader.skipValue();
                 }
-                likes.add(new Like(name,id));
             }
+
+            likes.add(new Like(name,id));
             reader.endObject();
 
         }
@@ -111,10 +113,11 @@ public class Util {
         reader.beginArray();
         while (reader.hasNext()){
             reader.beginObject();
+
+            String name = "";
+            String id = "";
             while (reader.hasNext()){
                 String title = reader.nextName();
-                String name = "";
-                String id = "";
                 if (title.equals("name")){
                     name = reader.nextString();
 //                    System.out.println(name);
@@ -124,8 +127,10 @@ public class Util {
                 } else{
                     reader.skipValue();
                 }
-                likes.add(new Friend(name,id));
+
+
             }
+            likes.add(new Friend(name, id));
             reader.endObject();
 
         }
