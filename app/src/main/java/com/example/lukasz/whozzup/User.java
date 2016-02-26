@@ -11,4 +11,14 @@ public class User {
     String id;
     String name;
     String description;
+
+
+    public String toStringCustom() {
+
+        return "ID "+id
+                +"Name: "+name
+                +" Description "+ description
+                +" Likes "+likes.toString()
+                +" Friends "+friends.toString();
+    }
 }
