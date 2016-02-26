@@ -26,14 +26,12 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-
         View superView = convertView;
 
         if (convertView == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            superView = vi.inflate(R.layout.fragment_item, null);
+            superView = vi.inflate(R.layout.friend_list_item, null);
             Friend p = getItem(position);
             System.out.println(position);
 
@@ -51,9 +49,6 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
                 }
             }
         }
-
-
-
         return superView;
     }
 

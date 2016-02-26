@@ -15,7 +15,7 @@ public class FriendListFragment extends ListFragment {
 
         globals glob = ((globals)getActivity().getApplicationContext());
 
-        FriendListAdapter customAdapter = new FriendListAdapter(getActivity(), R.layout.fragment_item, glob.getGlobalVarValue().friends);
+        FriendListAdapter customAdapter = new FriendListAdapter(getActivity(), R.layout.friend_list_item, glob.getGlobalVarValue().friends);
 
         setListAdapter(customAdapter);
     }
