@@ -1,5 +1,7 @@
 package com.example.lukasz.whozzup;
 
+import java.util.List;
+
 /**
  * Created by Lukasz on 2/24/2016.
  */
@@ -11,8 +13,9 @@ public class Event {
     String location;
     String date;
     String time;
+    List<String> attendees;
 
-    public Event (String creator, String category, String title, String description, String location, String date, String time){
+    public Event (String creator, String category, String title, String description, String location, String date, String time, List<String> attendees){
         this.creator = creator;
         this.category = category;
         this.title = title;
@@ -20,5 +23,19 @@ public class Event {
         this.location = location;
         this.date = date;
         this.time = time;
+        this.attendees = attendees;
+    }
+
+    public String getTitle(){
+        return title;
+    }
+    public String getDate(){
+        return date;
+    }
+    public String getTime(){
+        return time;
+    }
+    public String getFullDate(){
+        return date + " " + time;
     }
 }

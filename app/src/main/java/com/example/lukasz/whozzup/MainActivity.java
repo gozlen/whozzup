@@ -39,6 +39,8 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 // Updated your class body:
@@ -344,11 +346,6 @@ public class MainActivity extends AppCompatActivity
 
 
                 User user = glob.getGlobalVarValue();
-
-               /* for (Like like : user.likes) {
-                    System.out.println(like.getId());
-                    System.out.println(like.getName());
-                }*/
 
 
                 String res = "yay";

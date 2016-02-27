@@ -172,13 +172,19 @@ public class Create extends Fragment {
         View v  =  inflater.inflate(R.layout.fragment_create, container, false);
 
 
+        final Spinner spinner = (Spinner) v.findViewById(R.id.category_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.categories_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
         final Button button = (Button) v.findViewById(R.id.CreateEventButton);
         response = (TextView) v.findViewById(R.id.ResponseText);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText mEdit;
-                mEdit = (EditText) getView().findViewById(R.id.editText);
-                String category = mEdit.getText().toString();
+//                mEdit = (EditText) getView().findViewById(R.id.editText);
+                String category = (String) spinner.getSelectedItem();
 
                 mEdit = (EditText) getView().findViewById(R.id.editText2);
                 String title = mEdit.getText().toString();
@@ -197,18 +203,6 @@ public class Create extends Fragment {
 
                 new CreateEvent().execute("https://protected-ocean-61024.herokuapp.com/event/create/", category, title, description, location, date, time);
 
-
-                new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "/me/likes",
-                        null,
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-                                Log.d(TAG, response.toString());
-                            }
-                        }
-                ).executeAsync();
             }
         });
         return v;

@@ -86,7 +86,7 @@ public class Util {
                // System.out.println("got title");
                 event.event_title = reader.nextString();
             } else if (name.equals("restrictions")) {
-                System.out.println("got restrictions");
+                //System.out.println("got restrictions");
                 event.event_restrictions = reader.nextString();
 
             } else if (name.equals("category")) {
@@ -143,13 +143,10 @@ public class Util {
             if (name.equals("tags") && reader.peek() != JsonToken.NULL) {
                 user.likes = readTagsArray(reader);
             } else if (name.equals("description")) {
-                //System.out.println("got description");
                 user.description = reader.nextString();
             } else if (name.equals("userID")) {
-                //System.out.println("got user id");
                 user.id = reader.nextString();
             } else if (name.equals("friends")) {
-                //System.out.println("got friends");
                 user.friends = readFriendsArray(reader);
             } else {
                 reader.skipValue();
@@ -162,7 +159,6 @@ public class Util {
     }
 
     public List<Like> readTagsArray(JsonReader reader) throws IOException{
-       // System.out.println("READING TAGS");
         List<Like> likes = new ArrayList<>();
         reader.beginArray();
         while (reader.hasNext()){
@@ -174,10 +170,8 @@ public class Util {
                 String title = reader.nextName();
                 if (title.equals("name")){
                     name = reader.nextString();
-//                   // System.out.println(name);
                 } else if (title.equals("id")){
                     id = reader.nextString();
-//                   // System.out.println(id);
                 } else{
                     reader.skipValue();
                 }
@@ -191,8 +185,71 @@ public class Util {
         return likes;
     }
 
+    public List<Event> readEventArray(InputStream in) throws IOException{
+        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        List<Event> events = new ArrayList<>();
+        reader.beginArray();
+        while (reader.hasNext()){
+            reader.beginObject();
+
+            String creator = "";
+            String category = "";
+            String title = "";
+            String description = "";
+            String location= "";
+            String date= "";
+            String time= "";
+            List<String> attendees = new ArrayList<>();
+
+
+            while (reader.hasNext()){
+                String tag = reader.nextName();
+                if (tag.equals("title")){
+                    title = reader.nextString();
+                    //System.out.println(title);
+                } else if (tag.equals("creator")){
+                    creator = reader.nextString();
+                } else if (tag.equals("category")){
+                    category = reader.nextString();
+                } else if (tag.equals("title")){
+                    title = reader.nextString();
+                } else if (tag.equals("description")){
+                    description = reader.nextString();
+                } else if (tag.equals("location")){
+                    location = reader.nextString();
+                } else if (tag.equals("date")){
+                    date = reader.nextString();
+                } else if (tag.equals("time")){
+                    time = reader.nextString();
+                } else if (tag.equals("attendees")){
+                    attendees = readAttendeesArray(reader);
+                } else{
+                    reader.skipValue();
+                }
+            }
+
+            events.add(new Event(creator,category,title,description,location,date,time,attendees));
+            reader.endObject();
+
+        }
+        reader.endArray();
+        return events;
+    }
+
+    public List<String> readAttendeesArray(JsonReader reader) throws  IOException{
+        List<String> attendees = new ArrayList<>();
+        reader.beginArray();
+        while (reader.hasNext()){
+            attendees.add(reader.nextString());
+        }
+        reader.endArray();
+        return attendees;
+    }
+
+
+
     public List<Friend> readFriendsArray(JsonReader reader) throws IOException{
-        //System.out.println("READING TAGS");
+        System.out.println("reading friends array!!!!!!");
         List<Friend> likes = new ArrayList<>();
         reader.beginArray();
         while (reader.hasNext()){

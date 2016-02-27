@@ -33,7 +33,6 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
             vi = LayoutInflater.from(getContext());
             superView = vi.inflate(R.layout.friend_list_item, null);
             Friend p = getItem(position);
-            System.out.println(position);
 
             if (p != null) {
                 ProfilePictureView tt1 = (ProfilePictureView) superView.findViewById(R.id.id);
@@ -42,7 +41,6 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
                 if (tt1 != null) {
                     tt1.setProfileId(p.getId());
                 }
-                System.out.println(p.getId());
 
                 if (tt2 != null) {
                     tt2.setText(p.getName());

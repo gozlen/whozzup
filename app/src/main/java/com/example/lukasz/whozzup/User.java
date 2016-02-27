@@ -8,6 +8,7 @@ import java.util.List;
 public class User {
     List<Like> likes;
     List<Friend> friends;
+    List<Event> events;
     String id;
     String name;
     String description;
