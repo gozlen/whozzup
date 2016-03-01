@@ -64,8 +64,9 @@ public class Profile extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String a ;
+    private String mParam1 = null;
+    private String mParam2 = null;
     private static final String TAG = Profile.class.getSimpleName();
    private OnFragmentInteractionListener mListener;
     private Util util;
@@ -90,6 +91,9 @@ public class Profile extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    /*public Profile(String userID){
+        a = userID;
+    }*/
     public Profile() {
         // Required empty public constructor
     }
@@ -111,12 +115,22 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", AccessToken.getCurrentAccessToken().getUserId());
+
+        /*String id = null;
+        if(mParam1 != null && mParam1.equals(null) ){
+            id = AccessToken.getCurrentAccessToken().getUserId();
+            System.out.println("OnCreateView getUserID is."+id);
+
+        }else{
+            id = mParam1;
+            System.out.println("OnCreateView mParam1 is."+id);
+        }*/
+        //new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", AccessToken.getCurrentAccessToken().getUserId());
 
         //events that the user has created
-        new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", AccessToken.getCurrentAccessToken().getUserId());
+        //new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", AccessToken.getCurrentAccessToken().getUserId());
         //events that the user is attending - userID
-        new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", AccessToken.getCurrentAccessToken().getUserId());
+        //new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", AccessToken.getCurrentAccessToken().getUserId());
 
         return rootView;
 
@@ -165,7 +179,6 @@ public class Profile extends Fragment {
         }
 
         protected void onPostExecute(User result) {
-            System.out.println("RESULT HERE\n");
 
             try{
 
@@ -181,11 +194,11 @@ public class Profile extends Fragment {
     }
 
 
-    private class eventsCreated extends AsyncTask<String, Void, List<Events_Obj>> {
+    private class eventsCreated extends AsyncTask<String, Void, List<Event>> {
         //private class eventsCreated extends AsyncTask<String, Void, String> {
-        protected List<Events_Obj> doInBackground(String... str){
+        protected List<Event> doInBackground(String... str){
             InputStream in = null;
-            List<Events_Obj> eventsList = new ArrayList<Events_Obj>();
+            List<Event> eventsList = new ArrayList<Event>();
             try {
                 DataOutputStream printout;
                 URL url = new URL(str[0]);
@@ -211,8 +224,8 @@ public class Profile extends Fragment {
                 Util util = new Util();
                 in = con.getInputStream();
 
-                eventsList = util.readEventsJsonStream(in);
-                System.out.println(eventsList.size());
+                eventsList = util.readEventArray(in);
+
                 return eventsList;
 
 
@@ -222,51 +235,22 @@ public class Profile extends Fragment {
             }
         }
 
-        protected void onPostExecute(List<Events_Obj> result) {
+        protected void onPostExecute(List<Event> result) {
            // System.out.println("EVENTS_RESULT HERE\n");
+        EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, result);
+        ListView list = (ListView) getView().findViewById(R.id.listView1);
+        list.setAdapter(customAdapter);
 
 
-            JSONArray jsonArray = new JSONArray();
-            try {
-
-                for (int i=0; i < result.size(); i++) {
-                jsonArray.put(result.get(i).getJSONObject());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //System.out.println(jsonArray.toString());
-            ListView listView1 = (ListView) getView().findViewById(R.id.listView1);
-           try{
-               MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "eventTitle","eventCategory","eventDescription","eventLocation","eventDate","eventTime","eventAttendees"});
-
-               // Assuming the JSONtArray from Members has these 3 columns
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    //make a JSON object for each object in the JSON returned
-                    JSONObject todoItem = jsonArray.getJSONObject(i);
-                    String title = todoItem.getString("Title");
-                    String cat = todoItem.getString("Category");
-                    String des = todoItem.getString("Description");
-                    String loc = todoItem.getString("Location");
-                    String date = todoItem.getString("Date");
-                    String time = todoItem.getString("Time");
-                    String atten = "Attendees "+i;
-                    //String atten = todoItem.getString("Attendees");
-                    matrixCursor.addRow(new Object[]{i, title,cat,des,loc,date,time,atten});
-                }
-               fillListView(1,matrixCursor);
-            } catch (Exception e)
-            {  e.printStackTrace();
-            }
 
         }
     }//end of class eventsCreated extends AsyncTask
 
 
-    private class eventsInterested extends AsyncTask<String, Void, List<Events_Obj>> {
-       protected List<Events_Obj> doInBackground(String... str){
+    private class eventsInterested extends AsyncTask<String, Void, List<Event>> {
+       protected List<Event> doInBackground(String... str){
             InputStream in = null;
-            List<Events_Obj> eventsList = new ArrayList<Events_Obj>();
+            List<Event> eventsList = new ArrayList<Event>();
             try {
                 DataOutputStream printout;
                 URL url = new URL(str[0]);
@@ -292,8 +276,8 @@ public class Profile extends Fragment {
                 Util util = new Util();
                 in = con.getInputStream();
 
-                eventsList = util.readEventsJsonStream(in);
-                System.out.println(eventsList.size());
+                eventsList = util.readEventArray(in);
+
                 return eventsList;
 
 
@@ -303,87 +287,17 @@ public class Profile extends Fragment {
             }
         }
 
-        protected void onPostExecute(List<Events_Obj> result) {
-            System.out.println("EVENTS_RESULT HERE\n");
+        protected void onPostExecute(List<Event> result) {
 
+            EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, result);
+            ListView list = (ListView) getView().findViewById(R.id.listView2);
+            list.setAdapter(customAdapter);
 
-            JSONArray jsonArray = new JSONArray();
-            try {
-
-                for (int i=0; i < result.size(); i++) {
-                    jsonArray.put(result.get(i).getJSONObject());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //System.out.println(jsonArray.toString());
-            ListView listView1 = (ListView) getView().findViewById(R.id.listView1);
-            try{
-                MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "eventTitle","eventCategory","eventDescription","eventLocation","eventDate","eventTime","eventAttendees"});
-
-                // Assuming the JSONtArray from Members has these 3 columns
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    //make a JSON object for each object in the JSON returned
-                    JSONObject todoItem = jsonArray.getJSONObject(i);
-                    String title = todoItem.getString("Title");
-                    String cat = todoItem.getString("Category");
-                    String des = todoItem.getString("Description");
-                    String loc = todoItem.getString("Location");
-                    String date = todoItem.getString("Date");
-                    String time = todoItem.getString("Time");
-                    String atten = "Attendees "+i;
-                    //String atten = todoItem.getString("Attendees");
-                    matrixCursor.addRow(new Object[]{i, title,cat,des,loc,date,time,atten});
-                }
-                fillListView(2,matrixCursor);
-            } catch (Exception e)
-            {  e.printStackTrace();
-            }
 
         }
     }//end of class eventsInterested extends AsyncTask 2
 
-    public void fillListView(int listViewNumber,MatrixCursor matrixCursor){
-        if(listViewNumber == 1){
-        list = (ListView) getView().findViewById(R.id.listView1);
-        }
-        else{
-            list = (ListView) getView().findViewById(R.id.listView2);
-        }
 
-        String[] columns = new String[]{
-                "_id",
-                "eventTitle",
-                "eventCategory",
-                "eventDescription",
-                "eventLocation",
-                "eventDate",
-                "eventTime",
-                "eventAttendees"
-
-        };
-
-        int[] to = new int[]{
-                R.id.eventID,
-                R.id.eventTitle,
-                R.id.eventCategory,
-                R.id.eventDescription,
-                R.id.eventLocation,
-                R.id.eventDate,
-                R.id.eventTime,
-                R.id.eventAttendees,
-
-        };
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                context,
-                R.layout.events_list_layout,
-                matrixCursor,
-                columns,
-                to,
-                0
-        );
-        list.setAdapter(adapter);
-    }//end of fillListView
 
     private class updateDescription extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... str){
@@ -469,14 +383,20 @@ public class Profile extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
+        String id = null;
+        if(mParam1 == null  ){
+            id = AccessToken.getCurrentAccessToken().getUserId();
+            System.out.println("getUserID is."+id);
 
-        String id = AccessToken.getCurrentAccessToken().getUserId();
+        }else{
+            id = mParam1;
+            System.out.println("mParam1 is."+id+".");
+ }
+
 
         ProfilePictureView profPict;
         profPict = (ProfilePictureView) getView().findViewById(R.id.profile_picture);
         profPict.setProfileId(id);
-
-
         descriptionText =(TextView)getView().findViewById(R.id.descriptionTextBox);
         descriptionText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -503,96 +423,12 @@ public class Profile extends Fragment {
                         .show();
             }
         });
-
-
-          //listView
-        list = (ListView) getView().findViewById(R.id.listView1);
-        MatrixCursor matrixCursor = new MatrixCursor(new String[] {"_id", "eventName","eventDate","eventDescription"});
-        try{
-
-            // Assuming the JSONtArray from Members has these 3 columns
-            for (int i = 0; i < 10; i++) {
-                //make a JSON object for each object in the JSON returned
-                String eventName = "Event Name";
-                String eventDate = "Date";
-                String eventDescription = "Event Description";
-                matrixCursor.addRow(new Object[]{i, eventName, eventDate,eventDescription});
-            }
-        } catch (Exception e)
-        {  e.printStackTrace();
-        }
-        list = (ListView) getView().findViewById(R.id.listView1);
-        String[] columns = new String[]{
-                "_id",
-                "eventName",
-                "eventDate",
-                "eventDescription"
-        };
-
-        int[] to = new int[]{
-                R.id.eventID,
-                R.id.eventTitle,
-                R.id.eventDate,
-                R.id.eventDescription
-
-        };
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                context,
-                R.layout.events_list_layout,
-                matrixCursor,
-                columns,
-                to,
-                0
-        );
-        list.setAdapter(adapter);
+        new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", id);
+        new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", id);
+         new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", id);
 
 
 
-        //
-        //listView2
-        list2 = (ListView) getView().findViewById(R.id.listView2);
-         matrixCursor = new MatrixCursor(new String[] {"_id", "eventName","reason","eventDescription"});
-        try{
-
-            // Assuming the JSONtArray from Members has these 3 columns
-            for (int i = 0; i < 10; i++) {
-                //make a JSON object for each object in the JSON returned
-                String eventName = "Event Name - Date";
-                String reason = "Reason Suggested ";
-                String eventDescription = "Event Description";
-                matrixCursor.addRow(new Object[]{i, eventName, reason,eventDescription});
-            }
-        } catch (Exception e)
-        {  e.printStackTrace();
-        }
-        list = (ListView) getView().findViewById(R.id.listView2);
-        columns = new String[]{
-                "_id",
-                "eventName",
-                "reason",
-                "eventDescription"
-        };
-
-        to = new int[]{
-                R.id.eventID,
-                R.id.eventTitle,
-                R.id.eventDate,
-                R.id.eventDescription
-
-        };
-        adapter = new SimpleCursorAdapter(
-                context,
-                R.layout.events_list_layout,
-                matrixCursor,
-                columns,
-                to,
-                0
-        );
-        list2.setAdapter(adapter);
-
-
-
-        //
     }
 
     /**

@@ -249,7 +249,7 @@ public class Util {
 
 
     public List<Friend> readFriendsArray(JsonReader reader) throws IOException{
-        System.out.println("reading friends array!!!!!!");
+       // System.out.println("reading friends array!!!!!!");
         List<Friend> likes = new ArrayList<>();
         reader.beginArray();
         while (reader.hasNext()){
