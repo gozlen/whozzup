@@ -34,7 +34,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
             vi = LayoutInflater.from(getContext());
             superView = vi.inflate(R.layout.event_list_item, null);
             Event p = getItem(position);
-            System.out.println(position);
+           // System.out.println(position);
 
             if (p != null) {
                 ImageView tt1 = (ImageView) superView.findViewById(R.id.icon);
@@ -46,7 +46,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
                 }
 
                 if (tt3 != null) {
-                    System.out.println(p.getTitle());
+                   // System.out.println(p.getTitle());
                     tt3.setText(p.getTitle());
                 }
             }
