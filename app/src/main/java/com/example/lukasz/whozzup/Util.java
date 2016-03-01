@@ -268,8 +268,6 @@ public class Util {
                 } else{
                     reader.skipValue();
                 }
-
-
             }
             likes.add(new Friend(name, id));
             reader.endObject();

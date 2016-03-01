@@ -101,7 +101,6 @@ public class FriendListFragment extends ListFragment {
 
             }
         }
-
         protected void onPostExecute(List<Friend> friendList){
 
             globals glob = ((globals) getActivity().getApplicationContext());
