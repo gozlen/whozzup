@@ -13,9 +13,10 @@ public class Event {
     String location;
     String date;
     String time;
+    String id;
     List<String> attendees;
 
-    public Event (String creator, String category, String title, String description, String location, String date, String time, List<String> attendees){
+    public Event (String creator, String category, String title, String description, String location, String date, String time, List<String> attendees, String id){
         this.creator = creator;
         this.category = category;
         this.title = title;
@@ -24,6 +25,7 @@ public class Event {
         this.date = date;
         this.time = time;
         this.attendees = attendees;
+        this.id = id;
     }
 
     public String getTitle(){

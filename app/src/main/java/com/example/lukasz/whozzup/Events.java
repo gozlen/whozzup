@@ -31,10 +31,7 @@ public class Events extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
         new allEvents().execute("https://protected-ocean-61024.herokuapp.com/event/all/");
-
     }
 
     @Override

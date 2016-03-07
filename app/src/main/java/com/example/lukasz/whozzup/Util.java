@@ -199,6 +199,7 @@ public class Util {
             String location= "";
             String date= "";
             String time= "";
+            String id = "";
             List<String> attendees = new ArrayList<>();
 
 
@@ -223,12 +224,18 @@ public class Util {
                     time = reader.nextString();
                 } else if (tag.equals("attendees")){
                     attendees = readAttendeesArray(reader);
-                } else{
+                } else if (tag.equals("_id")){
+                    reader.beginObject();
+                    if (reader.nextName().equals("$oid")){
+                        id = reader.nextString();
+                    }
+                    reader.endObject();
+                } else {
                     reader.skipValue();
                 }
             }
-
-            events.add(new Event(creator,category,title,description,location,date,time,attendees));
+            System.out.println(id);
+            events.add(new Event(creator,category,title,description,location,date,time,attendees, id));
             reader.endObject();
 
         }
