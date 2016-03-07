@@ -37,6 +37,11 @@ public class Events extends ListFragment {
 
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+
+    }
+
 
 
     private class allEvents extends AsyncTask<String, Void, List<Event>> {

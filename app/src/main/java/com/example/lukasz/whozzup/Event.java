@@ -38,4 +38,5 @@ public class Event {
     public String getFullDate(){
         return date + " " + time;
     }
+    public String getCategory() {return category;}
 }

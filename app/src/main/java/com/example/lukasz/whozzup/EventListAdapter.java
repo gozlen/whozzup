@@ -38,6 +38,8 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 
             if (p != null) {
                 ImageView tt1 = (ImageView) superView.findViewById(R.id.icon);
+                String category = p.getCategory();
+                tt1.setImageResource(getImage(category));
                 TextView tt2 = (TextView) superView.findViewById(R.id.event_time);
                 TextView tt3 = (TextView) superView.findViewById(R.id.event_title);
 
@@ -52,6 +54,20 @@ public class EventListAdapter extends ArrayAdapter<Event> {
             }
         }
         return superView;
+    }
+
+    private int getImage(String category){
+        if (category.equals("Food"))
+            return R.drawable.food;
+        else if (category.equals("Hiking"))
+            return R.drawable.hiking;
+        else if (category.equals("Sports"))
+            return R.drawable.sports;
+        else if (category.equals("Movies"))
+            return R.drawable.cinema;
+        else if (category.equals("Drinks"))
+            return R.drawable.drinks;
+        return R.drawable.food;
     }
 
 }
