@@ -3,6 +3,7 @@ package com.example.lukasz.whozzup;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,7 +37,10 @@ public class Events extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-
+        Event f = (Event) l.getItemAtPosition(position);
+        Intent i = new Intent(getActivity(), EventActivity.class);
+        i.putExtra("id", f.getId());
+        startActivity(i);
     }
 
 

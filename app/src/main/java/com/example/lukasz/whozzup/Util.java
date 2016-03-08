@@ -234,7 +234,7 @@ public class Util {
                     reader.skipValue();
                 }
             }
-            System.out.println(id);
+            //System.out.println(id);
             events.add(new Event(creator,category,title,description,location,date,time,attendees, id));
             reader.endObject();
 

@@ -41,4 +41,7 @@ public class Event {
         return date + " " + time;
     }
     public String getCategory() {return category;}
+    public String getId() {return id;}
+    public String getLocation(){return location;}
+    public String getDescription() {return description;}
 }
