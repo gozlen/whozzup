@@ -72,7 +72,7 @@ public class Events extends ListFragment {
                 printout.close();
                 Util util = new Util();
                 in = con.getInputStream();
-                System.out.println("WTF");
+                //System.out.println("WTF");
 
                 List<Event> eventList = util.readEventArray(in);
 

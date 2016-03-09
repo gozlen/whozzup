@@ -27,33 +27,32 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View superView = convertView;
 
         if (convertView == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            superView = vi.inflate(R.layout.event_list_item, null);
+            convertView = vi.inflate(R.layout.event_list_item, null);
             Event p = getItem(position);
-           // System.out.println(position);
+            System.out.println(position);
 
             if (p != null) {
-                ImageView tt1 = (ImageView) superView.findViewById(R.id.icon);
+                ImageView tt1 = (ImageView) convertView.findViewById(R.id.icon);
                 String category = p.getCategory();
                 tt1.setImageResource(getImage(category));
-                TextView tt2 = (TextView) superView.findViewById(R.id.event_time);
-                TextView tt3 = (TextView) superView.findViewById(R.id.event_title);
+                TextView tt2 = (TextView) convertView.findViewById(R.id.event_time);
+                TextView tt3 = (TextView) convertView.findViewById(R.id.event_title);
 
                 if (tt2 != null) {
                     tt2.setText(p.getFullDate());
                 }
 
                 if (tt3 != null) {
-                   // System.out.println(p.getTitle());
+                    System.out.println(p.getTitle());
                     tt3.setText(p.getTitle());
                 }
             }
         }
-        return superView;
+        return convertView;
     }
 
     private int getImage(String category){

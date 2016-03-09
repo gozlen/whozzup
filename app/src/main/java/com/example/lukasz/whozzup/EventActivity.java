@@ -57,49 +57,6 @@ public class EventActivity extends AppCompatActivity {
         dialog.setMessage("Loading Event");
         dialog.setInverseBackgroundForced(false);
         dialog.show();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Event Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.example.lukasz.whozzup/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Event Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.example.lukasz.whozzup/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 
 
@@ -150,7 +107,21 @@ public class EventActivity extends AppCompatActivity {
             final Button b = (Button) findViewById(R.id.join);
             b.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    new attendEvent().execute("https://protected-ocean-61024.herokuapp.com/event/join/", id);
+                    if (b.getText().equals("I'm up!")){
+                        System.out.println("Joining");
+                        new attendEvent().execute("https://protected-ocean-61024.herokuapp.com/event/join/", id);
+
+                    }else {
+                        System.out.println("Leaving");
+
+                        new attendEvent().execute("https://protected-ocean-61024.herokuapp.com/event/leave/", id);
+                    }
+
+                    dialog.setCancelable(false);
+                    dialog.setMessage("Submitting request");
+                    dialog.setInverseBackgroundForced(false);
+                    dialog.show();
+
                 }
             });
 
@@ -222,7 +193,16 @@ public class EventActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String res) {
-            Toast.makeText(getApplicationContext(), "Joined event", Toast.LENGTH_SHORT).show();
+            dialog.hide();
+            final Button b = (Button) findViewById(R.id.join);
+
+            if (b.getText().equals("I'm up!")){
+                b.setText("Leave event");
+                Toast.makeText(getApplicationContext(), "Joined event", Toast.LENGTH_SHORT).show();
+            } else {
+                b.setText("I'm up!");
+                Toast.makeText(getApplicationContext(), "Left event", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
