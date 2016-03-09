@@ -86,6 +86,9 @@ public class Events extends ListFragment {
         }
 
         protected void onPostExecute(List<Event> eventList){
+            for(Event event: eventList){
+                System.out.println(event.getTitle());
+            }
             EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, eventList);
 
             setListAdapter(customAdapter);
