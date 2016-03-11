@@ -90,14 +90,6 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-
-//        String id = AccessToken.getCurrentAccessToken().getUserId();
-//        ProfilePictureView profPict;
-//        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
-//        profPict = (ProfilePictureView) headerView.findViewById(R.id.main_picture);
-//        profPict.setProfileId(id);
-
-
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -160,6 +152,13 @@ public class MainActivity extends AppCompatActivity
             new UpdateProfile().execute("https://protected-ocean-61024.herokuapp.com/user/update/likes/");
             new UserInfo().execute("https://protected-ocean-61024.herokuapp.com/user/");
             updated = true;
+
+            Fragment fragment = new Events();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_frame, fragment)
+                    .commit();
+
         }
     }
 

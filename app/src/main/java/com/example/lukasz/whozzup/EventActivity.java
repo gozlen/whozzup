@@ -59,7 +59,6 @@ public class EventActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
     private class getEvent extends AsyncTask<String, Void, List<Event>> {
         protected List<Event> doInBackground(String... str) {
             InputStream in = null;

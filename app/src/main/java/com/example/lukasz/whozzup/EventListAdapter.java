@@ -1,6 +1,8 @@
 package com.example.lukasz.whozzup;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,8 @@ public class EventListAdapter extends ArrayAdapter<Event> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        ImageHelper hlp = new ImageHelper();
+
         if (convertView == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
@@ -37,8 +41,13 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 
             if (p != null) {
                 ImageView tt1 = (ImageView) convertView.findViewById(R.id.icon);
+
                 String category = p.getCategory();
-                tt1.setImageResource(getImage(category));
+                Bitmap largeIcon = BitmapFactory.decodeResource(getContext().getResources(), getImage(category));
+                largeIcon = hlp.getRoundedCornerBitmap(largeIcon, 500);
+                tt1.setImageBitmap(largeIcon);
+
+
                 TextView tt2 = (TextView) convertView.findViewById(R.id.event_time);
                 TextView tt3 = (TextView) convertView.findViewById(R.id.event_title);
 
@@ -52,6 +61,8 @@ public class EventListAdapter extends ArrayAdapter<Event> {
                 }
             }
         }
+
+
         return convertView;
     }
 

@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -86,8 +87,14 @@ public class Events extends ListFragment {
         }
 
         protected void onPostExecute(List<Event> eventList){
-            for(Event event: eventList){
-                System.out.println(event.getTitle());
+            String id = AccessToken.getCurrentAccessToken().getUserId();
+            for (Iterator<Event> iter = eventList.listIterator(); iter.hasNext(); ) {
+                Event e = iter.next();
+                for (String a: e.attendees)
+                    if(a.equals(id)){
+                        iter.remove();
+                        break;
+                    }
             }
             EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, eventList);
 
