@@ -22,4 +22,20 @@ public class globals extends Application {
     public void setGlobalVarValue(User user) {
         this.user = user;
     }
+//
+//    public void setGlobalLongtitudeValue(double longtitude){
+//        user.longtitude = longtitude;
+//    }
+//
+//    public void setGlobalLattitudeValue(double lattitude){
+//        user.lattitude = lattitude;
+//    }
+//
+//    public double getGlobalLongtitudeValue(){
+//        return user.longtitude;
+//    }
+//
+//    public double getGlobalLattitudeValue(){
+//        return user.lattitude;
+//    }
 }

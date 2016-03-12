@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -119,7 +120,7 @@ public class Create extends Fragment {
                         .setView(input)
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                               editText3.setText(input.getText().toString());
+                                editText3.setText(input.getText().toString());
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -129,6 +130,8 @@ public class Create extends Fragment {
                         .show();
             }
         });
+
+
 
 
     }
@@ -177,6 +180,20 @@ public class Create extends Fragment {
                 R.array.categories_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        final EditText maps = (EditText) v.findViewById(R.id.editText4);
+
+        maps.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    Intent i = new Intent(getActivity(), MapsActivity.class);
+                    startActivity(i);
+                }
+            }
+        });
+
+
 
         final Button button = (Button) v.findViewById(R.id.CreateEventButton);
         response = (TextView) v.findViewById(R.id.ResponseText);

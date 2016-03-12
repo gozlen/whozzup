@@ -12,6 +12,8 @@ public class User {
     String id;
     String name;
     String description;
+    double longtitude = 0;
+    double lattitude = 0;
 
 
     public String toStringCustom() {
