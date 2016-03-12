@@ -29,11 +29,12 @@ import java.util.List;
 
 public class Events extends ListFragment {
 
+    AsyncTask mTask;
     List<Event> eventlist;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new allEvents().execute("https://protected-ocean-61024.herokuapp.com/event/all/");
+        mTask = new allEvents().execute("https://protected-ocean-61024.herokuapp.com/event/all/");
     }
 
     @Override
@@ -42,6 +43,12 @@ public class Events extends ListFragment {
         Intent i = new Intent(getActivity(), EventActivity.class);
         i.putExtra("id", f.getId());
         startActivity(i);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mTask.cancel(true);
     }
 
 
@@ -97,7 +104,6 @@ public class Events extends ListFragment {
                     }
             }
             EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, eventList);
-
             setListAdapter(customAdapter);
         }
     }
