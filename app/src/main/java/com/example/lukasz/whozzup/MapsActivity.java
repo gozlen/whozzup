@@ -1,7 +1,11 @@
 package com.example.lukasz.whozzup;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -13,11 +17,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    Marker mMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +39,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
         autocompleteFragment.setBoundsBias(new LatLngBounds(
-                new LatLng(22,114.9),
-                new LatLng(22.5,114.4)));
+                new LatLng(22, 114.9),
+                new LatLng(22.5, 114.4)));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -42,10 +48,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // TODO: Get info about the selected place.
                 System.out.println("Place: " + place.getName());
                 LatLng loc = place.getLatLng();
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(loc).title("Your Event"));
+                if(mMarker!=null)
+                    mMarker.remove();
+                mMarker = mMap.addMarker(new MarkerOptions().position(loc).title("Your Event"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 1000, null);
             }
 
             @Override
@@ -54,6 +61,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 System.out.println( "An error occurred: " + status);
             }
         });
+
+        Button b = (Button) findViewById(R.id.confirm_location);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMarker!=null){
+                    System.out.println("not finishing");
+                    double [] result = new double[2];
+                    result[0] = mMarker.getPosition().longitude;
+                    result[1] = mMarker.getPosition().latitude;
+                    Intent returnIntent = new Intent();
+                    System.out.println(result[0]);
+                    System.out.println(result[1]);
+                    returnIntent.putExtra("result",result);
+                    setResult(Activity.RESULT_OK,returnIntent);
+                    finish();
+
+                } else {
+                    System.out.println("it's null");
+                }
+            }
+        });
+
     }
 
 

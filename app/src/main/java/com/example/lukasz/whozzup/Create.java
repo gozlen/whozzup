@@ -1,7 +1,10 @@
 package com.example.lukasz.whozzup;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,6 +61,7 @@ public class Create extends Fragment {
     private String mParam2;
     private Util util;
     private TextView response;
+    ProgressDialog dialog;
 
     private OnFragmentInteractionListener mListener;
     private static final String TAG = Create.class.getSimpleName();
@@ -167,6 +171,22 @@ public class Create extends Fragment {
         }
         util = new Util();
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                System.out.println("Activity finished, getting result");
+                double [] result = data.getDoubleArrayExtra("result");
+                EditText mEdit = (EditText) getView().findViewById(R.id.editText4);
+                mEdit.setText(String.valueOf(result[0]) +"," + String.valueOf(result[1]));
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -188,14 +208,16 @@ public class Create extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     Intent i = new Intent(getActivity(), MapsActivity.class);
-                    startActivity(i);
+                    startActivityForResult(i, 1);
                 }
+
             }
+
         });
 
 
 
-        final Button button = (Button) v.findViewById(R.id.CreateEventButton);
+            final Button button = (Button) v.findViewById(R.id.CreateEventButton);
         response = (TextView) v.findViewById(R.id.ResponseText);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -219,6 +241,12 @@ public class Create extends Fragment {
                 String time = mEdit.getText().toString();
 
                 new CreateEvent().execute("https://protected-ocean-61024.herokuapp.com/event/create/", category, title, description, location, date, time);
+
+                dialog = new ProgressDialog(getView().getContext());
+                dialog.setCancelable(false);
+                dialog.setMessage("Creating Event");
+                dialog.setInverseBackgroundForced(false);
+                dialog.show();
 
             }
         });
@@ -273,6 +301,7 @@ public class Create extends Fragment {
         }
 
         protected void onPostExecute(String result) {
+            dialog.hide();
             response.setText(result);
 
         }
