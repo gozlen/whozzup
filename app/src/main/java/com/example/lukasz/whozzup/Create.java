@@ -2,7 +2,6 @@ package com.example.lukasz.whozzup;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -23,20 +22,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -178,7 +169,7 @@ public class Create extends Fragment {
             if(resultCode == Activity.RESULT_OK){
                 System.out.println("Activity finished, getting result");
                 double [] result = data.getDoubleArrayExtra("result");
-                EditText mEdit = (EditText) getView().findViewById(R.id.editText4);
+                EditText mEdit = (EditText) getView().findViewById(R.id.form_location);
                 mEdit.setText(String.valueOf(result[0]) +"," + String.valueOf(result[1]));
 
             }
@@ -201,7 +192,7 @@ public class Create extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        final EditText maps = (EditText) v.findViewById(R.id.editText4);
+        final EditText maps = (EditText) v.findViewById(R.id.form_location);
 
         maps.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -231,7 +222,7 @@ public class Create extends Fragment {
                 mEdit = (EditText) getView().findViewById(R.id.editText3);
                 String description = mEdit.getText().toString();
 
-                mEdit = (EditText) getView().findViewById(R.id.editText4);
+                mEdit = (EditText) getView().findViewById(R.id.form_location);
                 String location = mEdit.getText().toString();
 
                 mEdit = (EditText) getView().findViewById(R.id.editText6);

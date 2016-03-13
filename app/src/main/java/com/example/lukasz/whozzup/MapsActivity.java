@@ -13,6 +13,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,7 +21,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMapLongClickListener {
 
     private GoogleMap mMap;
     Marker mMarker;
@@ -29,7 +30,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -45,10 +45,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                System.out.println("Place: " + place.getName());
                 LatLng loc = place.getLatLng();
-                if(mMarker!=null)
+                if (mMarker != null)
                     mMarker.remove();
                 mMarker = mMap.addMarker(new MarkerOptions().position(loc).title("Your Event"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
@@ -57,8 +55,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
-                System.out.println( "An error occurred: " + status);
             }
         });
 
@@ -66,16 +62,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMarker!=null){
-                    System.out.println("not finishing");
-                    double [] result = new double[2];
+                if (mMarker != null) {
+                    double[] result = new double[2];
                     result[0] = mMarker.getPosition().longitude;
                     result[1] = mMarker.getPosition().latitude;
                     Intent returnIntent = new Intent();
-                    System.out.println(result[0]);
-                    System.out.println(result[1]);
-                    returnIntent.putExtra("result",result);
-                    setResult(Activity.RESULT_OK,returnIntent);
+                    returnIntent.putExtra("result", result);
+                    setResult(Activity.RESULT_OK, returnIntent);
                     finish();
 
                 } else {
@@ -86,19 +79,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng loc = new LatLng(22.2783, 114.1747);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 1000, null);
+        mMap.setOnMapLongClickListener(MapsActivity.this);
         mMap.setMyLocationEnabled(true);
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        if (mMarker != null)
+            mMarker.remove();
+        mMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Your Event"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 1000, null);
     }
 }
