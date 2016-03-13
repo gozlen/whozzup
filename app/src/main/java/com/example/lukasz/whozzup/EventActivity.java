@@ -1,8 +1,9 @@
 package com.example.lukasz.whozzup;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,13 @@ import com.facebook.AccessToken;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
 
@@ -26,13 +34,15 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity implements OnMapReadyCallback {
+    ImageHelper hlp = new ImageHelper();
     TextView title;
     TextView date;
-    TextView location;
-    TextView description;
+    List<Double> coords = new ArrayList<>();
+    GoogleMap mMap;
     ImageView img;
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
     String userID = accessToken.getUserId();
@@ -45,8 +55,23 @@ public class EventActivity extends AppCompatActivity {
     private GoogleApiClient client;
 
     @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+
+        LatLng loc = new LatLng(coords.get(0), coords.get(1));
+        System.out.println(coords.get(0) + "," +  coords.get(1));
+        mMap.addMarker(new MarkerOptions().position(loc).title("Your Event"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+
 
         Intent intent = getIntent();
         id = intent.getExtras().getString("id");
@@ -100,10 +125,14 @@ public class EventActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(List<Event> eventList) {
-            dialog.hide();
             setContentView(R.layout.activity_event);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.event_marker);
+            mapFragment.getMapAsync(EventActivity.this);
+            dialog.hide();
 
             final Button b = (Button) findViewById(R.id.join);
+
             b.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if (b.getText().equals("I'm up!")){
@@ -130,20 +159,25 @@ public class EventActivity extends AppCompatActivity {
                     b.setText("Leave event");
                 }
             }
-
             final Event e = eventList.get(0);
 
             title = (TextView) findViewById(R.id.event_info_title);
             date = (TextView) findViewById(R.id.event_info_date);
-            location = (TextView) findViewById(R.id.event_info_location);
-            description = (TextView) findViewById(R.id.event_info_description);
             img = (ImageView) findViewById(R.id.event_info_image);
 
             title.setText(e.getTitle());
             date.setText(e.getFullDate());
-            location.setText(e.getLocation());
-            description.setText(e.getDescription());
-            img.setImageResource(getImage(e.getCategory()));
+
+            String category = e.getCategory();
+            Bitmap largeIcon = BitmapFactory.decodeResource(getApplicationContext().getResources(), getImage(category));
+            largeIcon = hlp.getRoundedCornerBitmap(largeIcon, 500);
+            img.setImageBitmap(largeIcon);
+
+            String str = e.getLocation();
+            List<String> strList = Arrays.asList(str.split(","));
+            coords.add(0, Double.parseDouble(strList.get(1)));
+            coords.add(1, Double.parseDouble(strList.get(0)));
+
 
 
         }

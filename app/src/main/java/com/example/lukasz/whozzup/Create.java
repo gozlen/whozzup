@@ -102,11 +102,19 @@ public class Create extends Fragment {
             if (resultCode == Activity.RESULT_OK){
                 title = data.getStringExtra("result");
                 System.out.println(title);
+
+
+                Intent k = new Intent(getActivity(), CategoryActivity.class);
+                startActivityForResult(k, 3);
             }
         } else if (requestCode == 3){
             if (resultCode == Activity.RESULT_OK){
                 category = data.getStringExtra("result");
                 System.out.println(category);
+
+
+                Intent i = new Intent(getActivity(), MapsActivity.class);
+                startActivityForResult(i, 1);
             }
         }
     }
@@ -119,11 +127,7 @@ public class Create extends Fragment {
 
 
 
-        Intent i = new Intent(getActivity(), MapsActivity.class);
-        startActivityForResult(i, 1);
 
-        Intent k = new Intent(getActivity(), CategoryActivity.class);
-        startActivityForResult(k, 3);
 
         Intent j = new Intent(getActivity(), TitleActivity.class);
         startActivityForResult(j, 2);
