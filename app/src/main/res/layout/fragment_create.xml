@@ -4,21 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.lukasz.whozzup.Create"
     android:orientation="vertical">
-
-
-            <EditText
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/form_title"
-                android:hint="Title"/>
-
-            <EditText
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Location"
-                android:id="@+id/form_location"/>
             <EditText
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
@@ -33,19 +18,6 @@
                 android:id="@+id/editText7"
                 android:hint="Time"/>
 
-    <Spinner
-        android:layout_gravity="center"
-        android:id="@+id/category_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-            <Spinner
-                android:layout_toRightOf="@id/category_spinner"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/restriction"
-                android:entries="@array/restriction_array" />
 
             <Button
                 android:layout_gravity="center"

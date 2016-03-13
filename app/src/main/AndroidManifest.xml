@@ -36,23 +36,23 @@
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAJx3C788Ite-2vG3T9rOr2AeZrgzxn0rw"/>
+            android:value="AIzaSyAJx3C788Ite-2vG3T9rOr2AeZrgzxn0rw" />
 
         <activity
             android:name=".LoginActicity"
             android:label="@string/title_activity_login_acticity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EventActivity"></activity>
+        <activity android:name=".EventActivity" />
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
 
-        <activity android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-
-        </activity>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity android:name=".TitleActivity" />
+        <activity android:name=".CategoryActivity"></activity>
     </application>
+
 </manifest>
-
-

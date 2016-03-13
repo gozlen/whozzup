@@ -36,12 +36,14 @@ public class Create extends Fragment {
     private TextView response;
     ProgressDialog dialog;
 
-    private OnFragmentInteractionListener mListener;
     private static final String TAG = Create.class.getSimpleName();
 
     public Create() {
         // Required empty public constructor
     }
+    String title;
+    String location;
+    String category;
 
     public void onStart(){
         super.onStart();
@@ -92,14 +94,19 @@ public class Create extends Fragment {
 
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-                System.out.println("Activity finished, getting result");
                 double [] result = data.getDoubleArrayExtra("result");
-                EditText mEdit = (EditText) getView().findViewById(R.id.form_location);
-                mEdit.setText(String.valueOf(result[0]) +"," + String.valueOf(result[1]));
-
+                location = (String.valueOf(result[0]) +"," + String.valueOf(result[1]));
+                System.out.println(location);
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
+        } else if (requestCode == 2){
+            if (resultCode == Activity.RESULT_OK){
+                title = data.getStringExtra("result");
+                System.out.println(title);
+            }
+        } else if (requestCode == 3){
+            if (resultCode == Activity.RESULT_OK){
+                category = data.getStringExtra("result");
+                System.out.println(category);
             }
         }
     }
@@ -111,42 +118,21 @@ public class Create extends Fragment {
         View v  =  inflater.inflate(R.layout.fragment_create, container, false);
 
 
-        final Spinner spinner = (Spinner) v.findViewById(R.id.category_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.categories_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
 
         Intent i = new Intent(getActivity(), MapsActivity.class);
         startActivityForResult(i, 1);
 
+        Intent k = new Intent(getActivity(), CategoryActivity.class);
+        startActivityForResult(k, 3);
 
-        final EditText maps = (EditText) v.findViewById(R.id.form_location);
-        maps.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    Intent i = new Intent(getActivity(), MapsActivity.class);
-                    startActivityForResult(i, 1);
-                }
-
-            }
-
-        });
+        Intent j = new Intent(getActivity(), TitleActivity.class);
+        startActivityForResult(j, 2);
 
             final Button button = (Button) v.findViewById(R.id.CreateEventButton);
         response = (TextView) v.findViewById(R.id.ResponseText);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText mEdit;
-                String category = (String) spinner.getSelectedItem();
-
-                mEdit = (EditText) getView().findViewById(R.id.form_title);
-                String title = mEdit.getText().toString();
-
-                mEdit = (EditText) getView().findViewById(R.id.form_location);
-                String location = mEdit.getText().toString();
 
                 mEdit = (EditText) getView().findViewById(R.id.editText6);
                 String date = mEdit.getText().toString();
@@ -161,7 +147,6 @@ public class Create extends Fragment {
                 dialog.setMessage("Creating Event");
                 dialog.setInverseBackgroundForced(false);
                 dialog.show();
-
             }
         });
         return v;
@@ -218,25 +203,5 @@ public class Create extends Fragment {
             response.setText(result);
 
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }
