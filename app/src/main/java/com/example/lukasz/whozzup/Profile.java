@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -74,6 +75,7 @@ public class Profile extends Fragment {
     TextView descriptionText;
     String descriptionContent;
     Context context;
+    ProgressDialog dialog;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -108,6 +110,7 @@ public class Profile extends Fragment {
         }
 
 
+
     }
 
     @Override
@@ -115,22 +118,6 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-
-        /*String id = null;
-        if(mParam1 != null && mParam1.equals(null) ){
-            id = AccessToken.getCurrentAccessToken().getUserId();
-            System.out.println("OnCreateView getUserID is."+id);
-
-        }else{
-            id = mParam1;
-            System.out.println("OnCreateView mParam1 is."+id);
-        }*/
-        //new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", AccessToken.getCurrentAccessToken().getUserId());
-
-        //events that the user has created
-        //new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", AccessToken.getCurrentAccessToken().getUserId());
-        //events that the user is attending - userID
-        //new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", AccessToken.getCurrentAccessToken().getUserId());
 
         return rootView;
 
@@ -195,6 +182,7 @@ public class Profile extends Fragment {
 
 
     private class eventsCreated extends AsyncTask<String, Void, List<Event>> {
+
         //private class eventsCreated extends AsyncTask<String, Void, String> {
         protected List<Event> doInBackground(String... str){
             InputStream in = null;
@@ -248,7 +236,19 @@ public class Profile extends Fragment {
 
 
     private class eventsInterested extends AsyncTask<String, Void, List<Event>> {
-       protected List<Event> doInBackground(String... str){
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if(context == null){System.out.println("ITS TIME TO FREAK OUT \n\n\n\n");}
+            dialog = new ProgressDialog(getView().getContext());
+            dialog.setCancelable(false);
+            dialog.setMessage("Loadinging Profile");
+            dialog.setInverseBackgroundForced(false);
+            dialog.show();
+
+        }
+
+        protected List<Event> doInBackground(String... str){
             InputStream in = null;
             List<Event> eventsList = new ArrayList<Event>();
             try {
@@ -288,6 +288,8 @@ public class Profile extends Fragment {
         }
 
         protected void onPostExecute(List<Event> result) {
+            dialog.hide();
+            System.out.println("Testing List 2");
 
             EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, result);
             ListView list = (ListView) getView().findViewById(R.id.listView2);
@@ -300,6 +302,7 @@ public class Profile extends Fragment {
 
 
     private class updateDescription extends AsyncTask<String, Void, String> {
+
         protected String doInBackground(String... str){
             InputStream in = null;
             try {
@@ -424,6 +427,7 @@ public class Profile extends Fragment {
             }
         });
         new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", id);
+
         new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", id);
          new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", id);
 
