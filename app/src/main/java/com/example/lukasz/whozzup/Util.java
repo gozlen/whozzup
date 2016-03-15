@@ -200,6 +200,7 @@ public class Util {
             String date= "";
             String time= "";
             String id = "";
+            int score = 0;
             List<String> attendees = new ArrayList<>();
 
 
@@ -210,6 +211,8 @@ public class Util {
                     //System.out.println(title);
                 } else if (tag.equals("creator")){
                     creator = reader.nextString();
+                } else if (tag.equals("score")){
+                    score = reader.nextInt();
                 } else if (tag.equals("category")){
                     category = reader.nextString();
                 } else if (tag.equals("title")){
@@ -234,8 +237,8 @@ public class Util {
                     reader.skipValue();
                 }
             }
-//            System.out.println(id);
-            events.add(new Event(creator,category,title,description,location,date,time,attendees, id));
+//            System.out.println(score);
+            events.add(new Event(creator,category,title,description,location,date,time,attendees, id,score));
             reader.endObject();
 
         }

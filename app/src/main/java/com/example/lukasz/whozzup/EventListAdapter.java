@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -25,6 +26,21 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 
     public EventListAdapter(Context context, int resource, List<Event> items) {
         super(context, resource, items);
+    }
+
+    @Override
+    public void notifyDataSetChanged(){
+        System.out.println("DATASET CHANGED");
+        this.setNotifyOnChange(false);
+        this.sort(new Comparator<Event>() {
+            @Override
+            public int compare(Event lhs, Event rhs) {
+                System.out.println(lhs.getScore() - rhs.getScore());
+                return (rhs.getScore() - lhs.getScore());
+            }
+        });
+        this.setNotifyOnChange(true);
+        super.notifyDataSetChanged();
     }
 
     @Override
