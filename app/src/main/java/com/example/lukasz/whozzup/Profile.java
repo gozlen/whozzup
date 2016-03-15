@@ -181,58 +181,7 @@ public class Profile extends Fragment {
     }
 
 
-    private class eventsCreated extends AsyncTask<String, Void, List<Event>> {
 
-        //private class eventsCreated extends AsyncTask<String, Void, String> {
-        protected List<Event> doInBackground(String... str){
-            InputStream in = null;
-            List<Event> eventsList = new ArrayList<Event>();
-            try {
-                DataOutputStream printout;
-                URL url = new URL(str[0]);
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setDoOutput(true);
-                con.setDoInput(true);
-                con.setRequestProperty("Content-Type", "application/json");
-                con.setRequestProperty("Accept", "application/json");
-                con.setRequestMethod("POST");
-
-                String id = AccessToken.getCurrentAccessToken().getUserId();
-                JSONObject info = new JSONObject();
-                info.put("userID", id);
-
-
-
-                printout = new DataOutputStream(con.getOutputStream ());
-                String data = info.toString();
-                byte[] send = data.getBytes("UTF-8");
-                printout.write(send);
-                printout.flush();
-                printout.close();
-                Util util = new Util();
-                in = con.getInputStream();
-
-                eventsList = util.readEventArray(in);
-
-                return eventsList;
-
-
-            } catch (Exception e) {
-                Log.d(TAG, e.toString());
-               return eventsList;
-            }
-        }
-
-        protected void onPostExecute(List<Event> result) {
-           // System.out.println("EVENTS_RESULT HERE\n");
-        EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, result);
-        ListView list = (ListView) getView().findViewById(R.id.listView1);
-        list.setAdapter(customAdapter);
-
-
-
-        }
-    }//end of class eventsCreated extends AsyncTask
 
 
     private class eventsInterested extends AsyncTask<String, Void, List<Event>> {
@@ -396,7 +345,20 @@ public class Profile extends Fragment {
             System.out.println("mParam1 is."+id+".");
  }
 
+        Button btn = (Button) getView().findViewById(R.id.createdEvents);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Fragment newFragment = new CreatedEvents();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                transaction.replace(R.id.fragment_frame, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
+        });
         ProfilePictureView profPict;
         profPict = (ProfilePictureView) getView().findViewById(R.id.profile_picture);
         profPict.setProfileId(id);
@@ -428,7 +390,6 @@ public class Profile extends Fragment {
         });
         new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", id);
 
-        new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", id);
          new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", id);
 
 

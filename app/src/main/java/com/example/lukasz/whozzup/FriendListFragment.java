@@ -50,7 +50,7 @@ public class FriendListFragment extends ListFragment {
 
         Friend f = (Friend) l.getItemAtPosition(position);
         if(!f.equals(null)){
-        System.out.println("ID: " + f.getId() + ". Name: " + f.getName());
+        //System.out.println("ID: " + f.getId() + ". Name: " + f.getName());
 
         Fragment fragment = null;
 
