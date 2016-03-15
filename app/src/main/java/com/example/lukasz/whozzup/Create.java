@@ -130,6 +130,7 @@ public class Create extends Fragment {
 
 
         Intent j = new Intent(getActivity(), TitleActivity.class);
+        j.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(j, 2);
 
             final Button button = (Button) v.findViewById(R.id.CreateEventButton);

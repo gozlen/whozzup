@@ -15,8 +15,9 @@ public class Event {
     String time;
     String id;
     List<String> attendees;
+    int score = 0;
 
-    public Event (String creator, String category, String title, String description, String location, String date, String time, List<String> attendees, String id){
+    public Event (String creator, String category, String title, String description, String location, String date, String time, List<String> attendees, String id, int score){
         this.creator = creator;
         this.category = category;
         this.title = title;
@@ -26,6 +27,7 @@ public class Event {
         this.time = time;
         this.attendees = attendees;
         this.id = id;
+        this.score = score;
     }
 
     public String getTitle(){
@@ -44,4 +46,5 @@ public class Event {
     public String getId() {return id;}
     public String getLocation(){return location;}
     public String getDescription() {return description;}
+    public int getScore() {return score;}
 }

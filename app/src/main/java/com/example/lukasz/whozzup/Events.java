@@ -34,7 +34,7 @@ public class Events extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTask = new allEvents().execute("https://protected-ocean-61024.herokuapp.com/event/all/");
+        mTask = new allEvents().execute("https://protected-ocean-61024.herokuapp.com/event/available/");
     }
 
     @Override
@@ -104,6 +104,7 @@ public class Events extends ListFragment {
                     }
             }
             EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, eventList);
+            customAdapter.notifyDataSetChanged();
             setListAdapter(customAdapter);
         }
     }

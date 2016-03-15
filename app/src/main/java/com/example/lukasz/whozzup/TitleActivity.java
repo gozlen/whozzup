@@ -12,6 +12,15 @@ import android.widget.Toast;
 public class TitleActivity extends AppCompatActivity {
 
     @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent goToMainActivity = new Intent(getApplicationContext(),MainActivity.class);
+        goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Will clear out your activity history stack till now
+        startActivity(goToMainActivity);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_title);
