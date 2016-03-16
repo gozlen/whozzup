@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,7 +72,7 @@ public class Profile extends Fragment {
     private static final String TAG = Profile.class.getSimpleName();
    private OnFragmentInteractionListener mListener;
     private Util util;
-    ListView list,list2;
+    ListView list;
     TextView descriptionText;
     String descriptionContent;
     Context context;
@@ -241,8 +242,19 @@ public class Profile extends Fragment {
             System.out.println("Testing List 2");
 
             EventListAdapter customAdapter = new EventListAdapter(getActivity(), R.layout.event_list_item, result);
-            ListView list = (ListView) getView().findViewById(R.id.listView2);
+            list = (ListView) getView().findViewById(R.id.listView2);
             list.setAdapter(customAdapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Event f = (Event) parent.getItemAtPosition(position);
+                    Intent i = new Intent(getActivity(), EventActivity.class);
+                    i.putExtra("id", f.getId());
+                    startActivity(i);
+                    System.out.println("This is me doing shit");
+                }
+
+            });
 
 
         }
@@ -350,9 +362,9 @@ public class Profile extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Fragment newFragment = new CreatedEvents();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
+             Fragment newFragment = new CreatedEvents();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_frame, newFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();

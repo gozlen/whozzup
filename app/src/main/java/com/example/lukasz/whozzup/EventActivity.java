@@ -132,33 +132,47 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
             dialog.hide();
 
             final Button b = (Button) findViewById(R.id.join);
+            for (Event event : eventList) {
+                if (event.attendees.contains(userID)) {
+                    b.setText("Leave Event");
+                }
+            }
+            Event eventb = eventList.get(0);
+            if(eventb.creator.equals(userID)){
+               b.setText("Edit Event");
+            }else{
+                System.out.println("who made this");
+
+            }
 
             b.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if (b.getText().equals("I'm up!")){
                         System.out.println("Joining");
                         new attendEvent().execute("https://protected-ocean-61024.herokuapp.com/event/join/", id);
+                        dialog.setCancelable(false);
+                        dialog.setMessage("Submitting request");
+                        dialog.setInverseBackgroundForced(false);
+                        dialog.show();
 
-                    }else {
+                    }else if(b.getText().equals("Leave Event")) {
                         System.out.println("Leaving");
-
                         new attendEvent().execute("https://protected-ocean-61024.herokuapp.com/event/leave/", id);
+                        dialog.setCancelable(false);
+                        dialog.setMessage("Submitting request");
+                        dialog.setInverseBackgroundForced(false);
+                        dialog.show();
+                    }else{
+                        //execute edit event here
                     }
 
-                    dialog.setCancelable(false);
-                    dialog.setMessage("Submitting request");
-                    dialog.setInverseBackgroundForced(false);
-                    dialog.show();
+
 
                 }
             });
 
 
-            for (Event event : eventList) {
-                if (event.attendees.contains(userID)) {
-                    b.setText("Leave event");
-                }
-            }
+
             final Event e = eventList.get(0);
 
             title = (TextView) findViewById(R.id.event_info_title);
