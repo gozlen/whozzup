@@ -94,6 +94,7 @@ public class Events extends ListFragment {
         }
 
         protected void onPostExecute(List<Event> eventList){
+            ((MainActivity) getActivity()).setAllEvents(eventList);
             String id = AccessToken.getCurrentAccessToken().getUserId();
             for (Iterator<Event> iter = eventList.listIterator(); iter.hasNext(); ) {
                 Event e = iter.next();

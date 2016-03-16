@@ -44,8 +44,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     JSONArray likes;
+    List<Event> allEvents;
     JSONArray friends;
     private Util util = new Util();
+
+    public void setAllEvents(List<Event> list){
+        allEvents = list;
+    }
 
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();

@@ -61,7 +61,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
         LatLng loc = new LatLng(coords.get(0), coords.get(1));
         System.out.println(coords.get(0) + "," +  coords.get(1));
-        mMap.addMarker(new MarkerOptions().position(loc).title("Your Event"));
+        mMap.addMarker(new MarkerOptions().position(loc).title(title.getText().toString()));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
     }
@@ -236,6 +236,11 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                 b.setText("I'm up!");
                 Toast.makeText(getApplicationContext(), "Left event", Toast.LENGTH_SHORT).show();
             }
+
+
+            Intent j = new Intent(getApplicationContext(), Profile.class);
+            j.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(j);
         }
     }
 
