@@ -136,13 +136,9 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                 if (event.attendees.contains(userID)) {
                     b.setText("Leave Event");
                 }
-            }
-            Event eventb = eventList.get(0);
-            if(eventb.creator.equals(userID)){
-               b.setText("Edit Event");
-            }else{
-                System.out.println("who made this");
-
+                if (event.creator.equals(userID)){
+                    b.setText("Delete Event");
+                }
             }
 
             b.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +158,12 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                         dialog.setMessage("Submitting request");
                         dialog.setInverseBackgroundForced(false);
                         dialog.show();
-                    }else{
-                        //execute edit event here
+                    }else if (b.getText().equals("Delete Event")){
+                        new attendEvent().execute("https://protected-ocean-61024.herokuapp.com/event/delete/", id);
+                        dialog.setCancelable(false);
+                        dialog.setMessage("Deleting event");
+                        dialog.setInverseBackgroundForced(false);
+                        dialog.show();
                     }
 
 
@@ -241,18 +241,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
         protected void onPostExecute(String res) {
             dialog.hide();
-            final Button b = (Button) findViewById(R.id.join);
-
-            if (b.getText().equals("I'm up!")){
-                b.setText("Leave event");
-                Toast.makeText(getApplicationContext(), "Joined event", Toast.LENGTH_SHORT).show();
-            } else {
-                b.setText("I'm up!");
-                Toast.makeText(getApplicationContext(), "Left event", Toast.LENGTH_SHORT).show();
-            }
-
-
-            Intent j = new Intent(getApplicationContext(), Profile.class);
+            Intent j = new Intent(getApplicationContext(), MainActivity.class);
             j.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(j);
         }
