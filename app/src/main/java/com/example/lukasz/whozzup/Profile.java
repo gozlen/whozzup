@@ -10,7 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.MatrixCursor;
-import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory;c
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;

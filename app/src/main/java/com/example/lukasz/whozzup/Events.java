@@ -3,14 +3,23 @@ package com.example.lukasz.whozzup;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,21 +28,64 @@ import com.facebook.AccessToken;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 
-public class Events extends ListFragment {
+public class Events extends ListFragment{
 
     AsyncTask mTask;
     List<Event> eventlist;
+    LocationManager locationManager;
+    Location location;
+    LocationListener locationListener;
+
+    String TAG = "Here";
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location loc) {
+                double lat = loc.getLatitude();
+                double lng = loc.getLongitude();
+
+                Log.d(TAG, Double.toString(lat));
+                Log.d(TAG, Double.toString(lng));
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                System.out.println(provider + " enabled");
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+        };
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        try{
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        } catch(SecurityException e){
+
+        }
+
+
         mTask = new allEvents().execute("https://protected-ocean-61024.herokuapp.com/event/available/");
     }
 
@@ -46,9 +98,20 @@ public class Events extends ListFragment {
     }
 
     @Override
-    public void onPause(){
-        super.onPause();
-        mTask.cancel(true);
+    public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+        } catch (SecurityException e) {
+            Log.d(TAG, "wtf it's not working");
+        }
     }
 
 
@@ -69,6 +132,7 @@ public class Events extends ListFragment {
                 String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
                 info.put("userID", id);
+                info.put("location", Double.toString(location.getLongitude())+","+Double.toString(location.getLatitude()));
 
 
 
@@ -80,7 +144,6 @@ public class Events extends ListFragment {
                 printout.close();
                 Util util = new Util();
                 in = con.getInputStream();
-                //System.out.println("WTF");
 
                 List<Event> eventList = util.readEventArray(in);
 
