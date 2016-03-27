@@ -54,11 +54,8 @@ public class Events extends ListFragment{
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location loc) {
-                double lat = loc.getLatitude();
-                double lng = loc.getLongitude();
-
-                Log.d(TAG, Double.toString(lat));
-                Log.d(TAG, Double.toString(lng));
+                location.setLatitude(loc.getLatitude());
+                location.setLongitude(loc.getLongitude());
             }
 
             @Override
@@ -132,7 +129,13 @@ public class Events extends ListFragment{
                 String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
                 info.put("userID", id);
-                info.put("location", Double.toString(location.getLongitude())+","+Double.toString(location.getLatitude()));
+                System.out.println(id);
+                System.out.println("YAYYY");
+                String kkkk = Double.toString(location.getLongitude())+","+Double.toString(location.getLatitude());
+                info.put("location", kkkk);
+                System.out.println(kkkk);
+                System.out.println("YAYYY");
+
 
 
 
