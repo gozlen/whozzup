@@ -1,7 +1,4 @@
 package com.example.lukasz.whozzup;
-
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +11,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,12 +124,13 @@ public class Events extends ListFragment{
                 String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
                 info.put("userID", id);
-                System.out.println(id);
-                System.out.println("YAYYY");
-                String kkkk = Double.toString(location.getLongitude())+","+Double.toString(location.getLatitude());
-                info.put("location", kkkk);
-                System.out.println(kkkk);
-                System.out.println("YAYYY");
+                try{
+
+                    String kkkk = Double.toString(location.getLongitude())+","+Double.toString(location.getLatitude());
+                    info.put("location", kkkk);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
 
 
 
