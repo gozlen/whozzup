@@ -145,7 +145,6 @@ public class Profile extends Fragment {
 
                 //String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
-                System.out.println("CURRENT ID mParam1-mParam2 ------------" + mParam1+"-"+mParam2);
 
                 info.put("userID", mParam1);
 
@@ -353,11 +352,11 @@ public class Profile extends Fragment {
 
         if(mParam1 == null  ){
             mParam1 = AccessToken.getCurrentAccessToken().getUserId();
-            System.out.println("mParam1 is null so getUserID is."+mParam1);
+            //System.out.println("mParam1 is null so getUserID is."+mParam1);
 
         }else{
 
-            System.out.println("mParam1 is."+mParam1+".");
+            //System.out.println("mParam1 is."+mParam1+".");
  }
 
         Button btn = (Button) getView().findViewById(R.id.createdEvents);
@@ -367,6 +366,10 @@ public class Profile extends Fragment {
 
 
              Fragment newFragment = new CreatedEvents();
+                Bundle bundle = new Bundle();
+                bundle.putString("userID", mParam1);
+                bundle.putString("userName", mParam2);
+                newFragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_frame, newFragment);
                 transaction.addToBackStack(null);
