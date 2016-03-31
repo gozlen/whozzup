@@ -50,13 +50,13 @@ public class FriendListFragment extends ListFragment {
 
         Friend f = (Friend) l.getItemAtPosition(position);
         if(!f.equals(null)){
-        //System.out.println("ID: " + f.getId() + ". Name: " + f.getName());
 
         Fragment fragment = null;
 
         FragmentManager fragmentManager = getFragmentManager();
-            String nul = null;
-        fragment = new Profile().newInstance(f.getId(),null);
+            System.out.println("Creating New Fragment for \nID: " + f.getId() + ". Name: " + f.getName());
+
+            fragment = new Profile().newInstance(f.getId(),f.getName());
 
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_frame, fragment)

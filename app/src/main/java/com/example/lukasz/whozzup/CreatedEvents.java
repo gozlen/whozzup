@@ -67,7 +67,7 @@ public class CreatedEvents extends ListFragment {
 
 
 
-        String id = id = AccessToken.getCurrentAccessToken().getUserId();
+        String id = AccessToken.getCurrentAccessToken().getUserId();
         mTask = new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", id);
 
 
