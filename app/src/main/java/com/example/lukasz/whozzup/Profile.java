@@ -88,6 +88,7 @@ public class Profile extends Fragment {
     public static Profile newInstance(String param1, String param2) {
         Profile fragment = new Profile();
         Bundle args = new Bundle();
+
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
@@ -105,6 +106,7 @@ public class Profile extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity().getApplicationContext();
         if (getArguments() != null) {
+
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
@@ -141,9 +143,10 @@ public class Profile extends Fragment {
                 con.setRequestProperty("Accept", "application/json");
                 con.setRequestMethod("POST");
 
-                String id = AccessToken.getCurrentAccessToken().getUserId();
+                //String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
-                info.put("userID", id);
+
+                info.put("userID", mParam1);
 
 
 
@@ -210,9 +213,9 @@ public class Profile extends Fragment {
                 con.setRequestProperty("Accept", "application/json");
                 con.setRequestMethod("POST");
 
-                String id = AccessToken.getCurrentAccessToken().getUserId();
+
                 JSONObject info = new JSONObject();
-                info.put("userID", id);
+                info.put("userID", mParam1);
 
 
 
@@ -275,9 +278,9 @@ public class Profile extends Fragment {
                 con.setRequestProperty("Accept", "application/json");
                 con.setRequestMethod("POST");
 
-                String id = AccessToken.getCurrentAccessToken().getUserId();
+               // String id = AccessToken.getCurrentAccessToken().getUserId();
                 JSONObject info = new JSONObject();
-                info.put("userID", id);
+                info.put("userID", mParam1);
                 info.put("description", str[1]);
 
 
@@ -346,14 +349,14 @@ public class Profile extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        String id = null;
+
         if(mParam1 == null  ){
-            id = AccessToken.getCurrentAccessToken().getUserId();
-            System.out.println("getUserID is."+id);
+            mParam1 = AccessToken.getCurrentAccessToken().getUserId();
+            //System.out.println("mParam1 is null so getUserID is."+mParam1);
 
         }else{
-            id = mParam1;
-            System.out.println("mParam1 is."+id+".");
+
+            //System.out.println("mParam1 is."+mParam1+".");
  }
 
         Button btn = (Button) getView().findViewById(R.id.createdEvents);
@@ -363,6 +366,10 @@ public class Profile extends Fragment {
 
 
              Fragment newFragment = new CreatedEvents();
+                Bundle bundle = new Bundle();
+                bundle.putString("userID", mParam1);
+                bundle.putString("userName", mParam2);
+                newFragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_frame, newFragment);
                 transaction.addToBackStack(null);
@@ -372,7 +379,7 @@ public class Profile extends Fragment {
         });
         ProfilePictureView profPict;
         profPict = (ProfilePictureView) getView().findViewById(R.id.profile_picture);
-        profPict.setProfileId(id);
+        profPict.setProfileId(mParam1);
         descriptionText =(TextView)getView().findViewById(R.id.descriptionTextBox);
         descriptionText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -399,9 +406,9 @@ public class Profile extends Fragment {
                         .show();
             }
         });
-        new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", id);
+        new fillData().execute("https://protected-ocean-61024.herokuapp.com/user/", mParam1);
 
-         new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", id);
+         new eventsInterested().execute("https://protected-ocean-61024.herokuapp.com/user/attending/", mParam1);
 
 
 

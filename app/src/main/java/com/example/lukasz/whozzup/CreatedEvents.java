@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,6 +34,21 @@ public class CreatedEvents extends ListFragment {
 
     AsyncTask mTask;
     Button back;
+    String userID,userName;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+      // if(savedInstanceState.isEmpty() || savedInstanceState.equals(null)){System.out.println("BUndle is null");}
+        Bundle bundle = this.getArguments();
+        userID = bundle.getString("userID");
+
+        userName = bundle.getString("userName");
+        System.out.println("The user name and password fro craeted events is "+userID+"-"+userName);
+        View v =   super.onCreateView(inflater, container, savedInstanceState);
+
+
+        return v;
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -67,8 +83,8 @@ public class CreatedEvents extends ListFragment {
 
 
 
-        String id = id = AccessToken.getCurrentAccessToken().getUserId();
-        mTask = new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", id);
+
+        mTask = new eventsCreated().execute("https://protected-ocean-61024.herokuapp.com/user/events/", userID);
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -114,9 +130,9 @@ public class CreatedEvents extends ListFragment {
                 con.setRequestProperty("Accept", "application/json");
                 con.setRequestMethod("POST");
 
-                String id = AccessToken.getCurrentAccessToken().getUserId();
+
                 JSONObject info = new JSONObject();
-                info.put("userID", id);
+                info.put("userID", userID);
 
 
 
