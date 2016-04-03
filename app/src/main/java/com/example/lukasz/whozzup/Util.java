@@ -148,6 +148,11 @@ public class Util {
                 user.id = reader.nextString();
             } else if (name.equals("friends")) {
                 user.friends = readFriendsArray(reader);
+            } else if (name.equals("interests")) {
+                user.interests = readInterestsArray(reader);
+            } else if (name.equals("slider")) {
+                user.slider = reader.nextInt();
+                System.out.println(user.slider);
             } else {
                 reader.skipValue();
             }
@@ -156,6 +161,16 @@ public class Util {
 
 
         return user;
+    }
+
+    public List<String> readInterestsArray(JsonReader reader) throws IOException{
+        List<String> interests = new ArrayList<>();
+        reader.beginArray();
+        while(reader.hasNext()){
+            interests.add(reader.nextString());
+        }
+        reader.endArray();
+        return interests;
     }
 
     public List<Like> readTagsArray(JsonReader reader) throws IOException{

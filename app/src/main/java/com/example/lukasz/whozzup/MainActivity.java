@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_friends) {
             fragment = new FriendListFragment();
         } else if (id == R.id.nav_share) {
-
+            fragment = new SettingsFragment();
         } else if (id == R.id.nav_exit) {
             LoginManager.getInstance().logOut();
             this.finish();
@@ -276,10 +276,6 @@ public class MainActivity extends AppCompatActivity
 
                 globals glob = ((globals) getApplicationContext());
                 glob.setGlobalVarValue(util.readJsonStream(in));
-
-
-                User user = glob.getGlobalVarValue();
-
 
                 String res = "yay";
                 return res;

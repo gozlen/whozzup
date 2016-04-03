@@ -9,9 +9,11 @@ public class User {
     List<Like> likes;
     List<Friend> friends;
     List<Event> events;
+    List<String> interests;
     String id;
     String name;
     String description;
+    int slider = 0;
     double longtitude = 0;
     double lattitude = 0;
 

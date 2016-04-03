@@ -1,0 +1,96 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lukasz.whozzup.SettingsFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:paddingTop="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Categories"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+        <CheckBox
+            android:id="@+id/food_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food"/>
+
+        <CheckBox
+            android:id="@+id/drink_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drinks"/>
+
+        <CheckBox
+            android:id="@+id/sports_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sports"/>
+
+        <CheckBox
+            android:id="@+id/hiking_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hiking"/>
+
+        <CheckBox
+            android:id="@+id/movies_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Movies"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:paddingTop="50dp"
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Location Sensitivity"
+                android:textAppearance="?android:attr/textAppearanceLarge" >
+            </TextView>
+
+            <SeekBar
+                android:id="@+id/seeker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/textView1"
+                android:layout_marginTop="26dp"
+                android:max="5" >
+            </SeekBar>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/seeker"
+                android:text="   0" >
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/seeker"
+                android:text="5   " />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/update_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Preferences"/>
+
+    </LinearLayout>
+
+</FrameLayout>

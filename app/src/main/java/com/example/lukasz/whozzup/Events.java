@@ -82,6 +82,12 @@ public class Events extends ListFragment{
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mTask.cancel(true);
+    }
+
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Event f = (Event) l.getItemAtPosition(position);
         Intent i = new Intent(getActivity(), EventActivity.class);
